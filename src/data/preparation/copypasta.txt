@@ -1,0 +1,41 @@
+Pneumite icon1.png   Pneumite	Crafting material	Flame seals item.png 4000
+Glass fiber icon1.png   Glass Fiber	Crafting material	Flame seals item.png 7000
+Quick-hardening sealant icon1.png   Quick-hardening Sealant	Crafting material	Flame seals item.png 2300
+Smoked bacon icon1.png   Smoked Bacon	Crafting material	Flame seals item.png 250
+Roasted coffee beans icon1.png   Roasted Coffee Beans	Crafting material	Flame seals item.png 250
+Wootz ore icon1.png   Wootz Ore	Crafting material	Flame seals item.png 2250
+Arachne web icon1.png   Arachne Web	Crafting material	Flame seals item.png 2250
+Raziqsap icon1.png   Raziqsap	Crafting material	Flame seals item.png 250
+Dubbin icon1.png   Dubbin	Crafting material	Flame seals item.png 2250
+Borax icon1.png   Borax	Crafting material	Flame seals item.png 250
+Canard breast icon1.png   Canard Breast	Crafting material	Flame seals item.png 30
+Dalamud popoto icon1.png   Dalamud Popoto	Crafting material	Flame seals item.png 30
+Royal kukuru bean icon1.png   Royal Kukuru Bean	Crafting material	Flame seals item.png 30
+Star anise icon1.png   Star Anise	Crafting material	Flame seals item.png 30
+Scheelite icon1.png   Scheelite	Crafting material	Flame seals item.png 1500
+Emery icon1.png   Emery	Crafting material	Flame seals item.png 1500
+Petrified log icon1.png   Petrified Log	Crafting material	Flame seals item.png 1500
+Cashmere fleece icon1.png   Cashmere Fleece	Crafting material	Flame seals item.png 1500
+Saurian skin icon1.png   Saurian Skin	Crafting material	Flame seals item.png 1500
+Tawny latex icon1.png   Tawny Latex	Crafting material	Flame seals item.png 450
+Raziqsand icon1.png   Raziqsand	Crafting material	Flame seals item.png 1500
+Cooking sherry icon1.png   Cooking Sherry	Crafting material	Flame seals item.png 20
+Peacock ore icon1.png   Peacock Ore	Crafting material	Flame seals item.png 200
+Aqueous whetstone icon1.png   Aqueous Whetstone	Crafting material	Flame seals item.png 200
+Minium icon1.png   Minium	Crafting material	Flame seals item.png 200
+Potash icon1.png   Potash	Crafting material	Flame seals item.png 200
+Lime sulphur icon1.png   Lime Sulphur	Crafting material	Flame seals item.png 200
+Filtered water icon1.png   Filtered Water	Crafting material	Flame seals item.png 20
+Voidsent blood icon1.png   Voidsent Blood	Crafting material	Flame seals item.png 20
+Animal fat icon1.png   Animal Fat	Crafting material	Flame seals item.png 200
+Hardened sap icon1.png   Hardened Sap	Crafting material	Flame seals item.png 200
+Coke icon1.png   Coke	Crafting material	Flame seals item.png 200
+Urushi icon1.png   Urushi	Crafting material	Flame seals item.png 600
+Composite whetstone icon1.png   Composite Whetstone	Crafting material	Flame seals item.png 600
+Heat-resistant plaster icon1.png   Heat-resistant Plaster	Crafting material	Flame seals item.png 600
+Clear fluorite icon1.png   Clear Fluorite	Crafting material	Flame seals item.png 600
+Lampblack linseed oil icon1.png   Lampblack Linseed Oil	Crafting material	Flame seals item.png 600
+Camel hair icon1.png   Camel Hair	Crafting material	Flame seals item.png 600
+Black cinnabar icon1.png   Black Cinnabar	Crafting material	Flame seals item.png 600
+Duck bones icon1.png   Duck Bones	Crafting material	Flame seals item.png 600
+Xelphatol spring water icon1.png   Xelphatol Spring Water	Crafting material	Flame seals item.png 2500
