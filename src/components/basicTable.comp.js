@@ -17,9 +17,11 @@ export default function BasicTable(props) {
 						<TableCell>Item name</TableCell>
 						<TableCell align="right">Union Cost</TableCell>
 						<TableCell align="right">Gil Price</TableCell>
-						<TableCell align="right">stDev</TableCell>
+						<TableCell align="right">Score</TableCell>
+
+						{/* <TableCell align="right">stDev</TableCell>
 						<TableCell align="right">Value</TableCell>
-						<TableCell align="right">Volume</TableCell>
+						<TableCell align="right">Volume</TableCell> */}
 					</TableRow>
 				</TableHead>
 				<TableBody>
@@ -30,9 +32,11 @@ export default function BasicTable(props) {
 							</TableCell>
 							<TableCell align="right">{row.itemCost}</TableCell>
 							<TableCell align="right">{row.itemGilValue.toFixed(2)}</TableCell>
-							<TableCell align="right">{row.stDev.toFixed(2)}%</TableCell>
-							<TableCell align="right">{row.itemValue.toFixed(2)}</TableCell>
-							<TableCell align="right">{row.itemVelocity.toFixed(2)}</TableCell>
+							<TableCell align="right">{row.Score.toFixed(2)}</TableCell>
+
+							{/* <TableCell align="right">{row.stDevScore.toFixed(2)}%</TableCell> */}
+							{/* <TableCell align="right">{row.itemValueScore.toFixed(2)}</TableCell> */}
+							{/* <TableCell align="right">{row.itemVelocityScore.toFixed(2)}</TableCell> */}
 						</TableRow>
 					))}
 				</TableBody>
