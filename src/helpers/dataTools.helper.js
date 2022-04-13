@@ -6,7 +6,7 @@ export function getItemIds(listOfItems) {
 	return itemString.slice(0, -1);
 }
 
-export function combineData(mainList, responseObject) {
+export function combineUnionData(mainList, responseObject) {
 	let newList = [];
 	mainList.forEach((element) => {
 		const itemId = element.itemId;
@@ -22,31 +22,84 @@ export function combineData(mainList, responseObject) {
 			];
 			element["itemGilValue"] = getMedian(element["pricesList"]);
 			element["stDev"] = (getStdev(element["pricesList"]) / element["itemGilValue"]) * 100;
-
+			element["forSale"] = 0;
+			responseObject.items[itemId]["listings"].forEach((listing) => {
+				element["forSale"] += listing.quantity;
+			});
+			element["numListings"] = element["forSale"] / responseObject.items[itemId]["listings"].length;
 			element["itemValue"] = element["itemGilValue"] / element["itemCost"];
 			newList.push(element);
 		} catch (error) {}
 	});
-	const parameterList = ["itemVelocity", "stDev", "itemValue"];
+	const parameterList = ["itemVelocity", "stDev", "itemValue", "numListings"];
 	const minMax = findMinMax(newList, parameterList);
+
 	newList.forEach((itemElement) => {
 		itemElement["ScoreValues"] = 0;
 		parameterList.forEach((parameterElement) => {
-			const itemValue = itemElement[parameterElement];
-			const itemMin = minMax[parameterElement]["min"];
-			const itemMax = minMax[parameterElement]["max"];
-			const itemScore = (itemValue - itemMin) * (100 / (itemMax - itemMin));
+			let itemValue = itemElement[parameterElement];
+			const itemLower = minMax[parameterElement]["lowerFence"];
+			const itemUpper = minMax[parameterElement]["upperFence"];
+			let itemScore = (itemValue - itemLower) * (100 / (itemUpper - itemLower));
+			if (itemScore < 0) {
+				itemScore = 0;
+			} else if (itemScore > 100) {
+				itemScore = 100;
+			}
+
+			if (parameterElement === "stDev") {
+				itemScore = 100 - itemScore;
+			}
+
 			itemElement[parameterElement + "Score"] = itemScore;
 			itemElement["ScoreValues"] += itemScore;
 		});
-		itemElement["Score"] = itemElement["ScoreValues"] / 3;
+		itemElement["Score"] = itemElement["ScoreValues"] / parameterList.length;
 	});
 	newList.sort((a, b) => {
 		return b.Score - a.Score;
 	});
-	console.log(newList);
-
 	return newList;
+}
+
+export function combineFlippingData(mainList, responseObject) {
+	mainList.forEach((itemElement) => {
+		const responseItem = responseObject.items[itemElement.itemId];
+		let lowerListings = [];
+		let lowestTwinListings = [];
+		responseItem.listings.every((listingElement) => {
+			if (listingElement.worldID === 33) {
+				lowestTwinListings.push(listingElement.pricePerUnit);
+				if (lowestTwinListings.length >= 3) {
+					return false;
+				}
+			} else {
+				lowerListings.push(listingElement);
+			}
+			return true;
+		});
+		const lowestTwinPrice = getMedian(lowestTwinListings);
+		itemElement["lowestTwinPrice"] = lowestTwinPrice;
+		const underCutValue = lowestTwinPrice * 0.75;
+		let viableListings = [];
+		lowerListings.forEach((listingElement) => {
+			if (listingElement.pricePerUnit <= underCutValue) {
+				viableListings.push(listingElement);
+			}
+		});
+		itemElement["viableListings"] = viableListings;
+		const timeNow = new Date();
+		const timeUpdate = new Date(responseItem.lastUploadTime);
+		const timeDifference = timeNow.getTime() - timeUpdate.getTime();
+
+		const DaysDifference = Math.floor(timeDifference / (1000 * 60 * 60 * 24));
+		const HoursDifference = Math.floor(timeDifference / (1000 * 60 * 60));
+		const MinutesDifference = Math.floor(timeDifference / (1000 * 60));
+		const timeDifferenceString =
+			DaysDifference + " days, " + HoursDifference + " hours, " + MinutesDifference + " minutes.";
+		itemElement["timeSinceUpdate"] = timeDifferenceString;
+	});
+	return mainList;
 }
 
 function getStdev(array) {
@@ -56,8 +109,9 @@ function getStdev(array) {
 }
 
 function getMedian(array) {
-	array.sort();
-	return array[1];
+	let middle = Math.floor(array.length / 2);
+	array = [...array].sort((a, b) => a - b);
+	return array.length % 2 !== 0 ? array[middle] : (array[middle - 1] + array[middle]) / 2;
 }
 
 function findMinMax(newList, parameterList) {
@@ -71,6 +125,13 @@ function findMinMax(newList, parameterList) {
 		});
 	});
 	parameterList.forEach((parameterElement) => {
+		const sortedArray = [...minMaxDict[parameterElement]["values"]].sort((a, b) => a - b);
+		const lowerQuart = sortedArray[parseInt(0.25 * sortedArray.length)];
+		const upperQuart = sortedArray[parseInt(0.75 * sortedArray.length)];
+
+		minMaxDict[parameterElement]["lowerFence"] = lowerQuart;
+		minMaxDict[parameterElement]["upperFence"] = upperQuart;
+
 		minMaxDict[parameterElement]["min"] = Math.min(...minMaxDict[parameterElement]["values"]);
 		minMaxDict[parameterElement]["max"] = Math.max(...minMaxDict[parameterElement]["values"]);
 	});
