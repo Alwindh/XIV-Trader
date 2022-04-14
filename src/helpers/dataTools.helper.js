@@ -67,39 +67,65 @@ export function combineFlippingData(mainList, responseObject) {
 		const responseItem = responseObject.items[itemElement.itemId];
 		let lowerListings = [];
 		let lowestTwinListings = [];
-		responseItem.listings.every((listingElement) => {
-			if (listingElement.worldID === 33) {
-				lowestTwinListings.push(listingElement.pricePerUnit);
-				if (lowestTwinListings.length >= 3) {
-					return false;
+		if (itemElement.itemName.includes("Grade 6 Tincture")) {
+			responseItem.listings.every((listingElement) => {
+				if (listingElement.worldID === 33 && listingElement.hq) {
+					lowestTwinListings.push(listingElement.pricePerUnit);
+					if (lowestTwinListings.length >= 3) {
+						return false;
+					}
+				} else if (listingElement.hq) {
+					lowerListings.push(listingElement);
 				}
-			} else {
-				lowerListings.push(listingElement);
-			}
-			return true;
-		});
+				return true;
+			});
+		} else {
+			responseItem.listings.every((listingElement) => {
+				if (listingElement.worldID === 33) {
+					lowestTwinListings.push(listingElement.pricePerUnit);
+					if (lowestTwinListings.length >= 3) {
+						return false;
+					}
+				} else {
+					lowerListings.push(listingElement);
+				}
+				return true;
+			});
+		}
+
 		const lowestTwinPrice = getMedian(lowestTwinListings);
 		itemElement["lowestTwinPrice"] = lowestTwinPrice;
 		const underCutValue = lowestTwinPrice * 0.75;
 		let viableListings = [];
+		let idCounter = 0;
 		lowerListings.forEach((listingElement) => {
 			if (listingElement.pricePerUnit <= underCutValue) {
+				listingElement["timeString"] = getDifferenceString(listingElement.lastReviewTime * 1000);
+				listingElement["listingId"] = itemElement.itemId + "-" + idCounter;
+				idCounter += 1;
 				viableListings.push(listingElement);
 			}
 		});
 		itemElement["viableListings"] = viableListings;
-		const timeNow = new Date();
-		const timeUpdate = new Date(responseItem.lastUploadTime);
-		const timeDifference = timeNow.getTime() - timeUpdate.getTime();
 
-		const DaysDifference = Math.floor(timeDifference / (1000 * 60 * 60 * 24));
-		const HoursDifference = Math.floor(timeDifference / (1000 * 60 * 60));
-		const MinutesDifference = Math.floor(timeDifference / (1000 * 60));
-		const timeDifferenceString =
-			DaysDifference + " days, " + HoursDifference + " hours, " + MinutesDifference + " minutes.";
+		const timeDifferenceString = getDifferenceString(responseItem.lastUploadTime);
 		itemElement["timeSinceUpdate"] = timeDifferenceString;
 	});
 	return mainList;
+}
+
+function getDifferenceString(listingTime) {
+	const timeNow = new Date();
+	const timeUpdate = new Date(listingTime);
+	const timeDifference = timeNow.getTime() - timeUpdate.getTime();
+	const DaysDifference = Math.floor(timeDifference / (1000 * 60 * 60 * 24));
+	const DaysDifferenceString = DaysDifference > 0 ? DaysDifference + " days, " : "";
+	const HoursDifference = Math.floor(timeDifference / (1000 * 60 * 60)) - DaysDifference * 24;
+	const HoursDifferenceString = HoursDifference > 0 ? HoursDifference + " hours, " : "";
+	const MinutesDifference = Math.floor(timeDifference / (1000 * 60)) - HoursDifference * 60;
+	const MinutesDifferenceString = MinutesDifference > 0 ? MinutesDifference + " minutes." : "";
+	const timeDifferenceString = DaysDifferenceString + HoursDifferenceString + MinutesDifferenceString;
+	return timeDifferenceString;
 }
 
 function getStdev(array) {

@@ -1,0 +1,32 @@
+[
+    {"itemName" : "Eldthurs Horn", "itemId" : 24219},
+    {"itemName" : "Eurekan Petrel Horn", "itemId" : 24630},
+    {"itemName" : "Magicked Bed", "itemId" : 26782},
+    {"itemName" : "Dhalmel Whistle", "itemId" : 28124},
+    {"itemName" : "Albino Karakul Horn", "itemId" : 28125},
+    {"itemName" : "Ufiti Horn", "itemId" : 28917},
+    {"itemName" : "Construct 14 Identification Key", "itemId" : 30102},
+    {"itemName" : "Zu Horn", "itemId" : 14083},
+
+    {"itemName" : "Dodo Horn", "itemId" : 23023},
+
+    {"itemName" : "Night Pegasus Whistle", "itemId" : 16564},
+
+    {"itemName" : "Flying Chair", "itemId" : 21052},
+
+    {"itemName" : "Construct VI-S Core", "itemId" : 33145},
+
+    {"itemName" : "Antelope Doe Horn", "itemId" : 33674},
+
+    {"itemName" : "Deinonychus Horn", "itemId" : 33684},
+
+    {"itemName" : "Gilded Mikoshi Flute", "itemId" : 33687},
+    {"itemName" : "Golden Ronkan Flute", "itemId" : 33688},
+    {"itemName" : "Wivre Horn", "itemId" : 36005},
+    {"itemName" : "Calydontis Horn", "itemId" : 36003},
+    {"itemName" : "Troll Horn", "itemId" : 36904},
+    {"itemName" : "Alkonost Whistle", "itemId" : 36906},
+    {"itemName" : "Megalotragus Horn", "itemId" : 30862},
+    {"itemName" : "Incitatus Whistle", "itemId" : 30865}
+
+]

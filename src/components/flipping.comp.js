@@ -32,35 +32,39 @@ export default function UnionComp(props) {
 				{tableData.map((itemElement) => {
 					if (itemElement.viableListings.length > 0) {
 						return (
-							<Accordion>
+							<Accordion key={itemElement.itemId}>
 								<AccordionSummary
 									expandIcon={<ExpandMoreIcon />}
 									aria-controls="panel1a-content"
 									id="panel1a-header"
 								>
-									<Typography>
-										{itemElement.itemName} {itemElement.lowestTwinPrice + " Gil"}{" "}
+									<Typography sx={{ width: "33%", flexShrink: 0 }}>{itemElement.itemName}</Typography>
+									<Typography sx={{ width: "33%", color: "text.secondary" }}>
+										{itemElement.lowestTwinPrice + " Gil"}
+									</Typography>
+									<Typography sx={{ width: "33%", color: "text.secondary" }}>
 										{itemElement.timeSinceUpdate}
 									</Typography>
 								</AccordionSummary>
 								<AccordionDetails>
-									<Grid container spacing={2}>
-										{itemElement.viableListings.map((listing) => {
-											return (
-												<>
-													<Grid item xs={4}>
-														{listing.pricePerUnit}
-													</Grid>
-													<Grid item xs={4}>
-														{listing.quantity}
-													</Grid>
-													<Grid item xs={4}>
-														{listing.worldName}
-													</Grid>
-												</>
-											);
-										})}
-									</Grid>
+									{itemElement.viableListings.map((listing) => {
+										return (
+											<Grid container spacing={2} key={listing.listingId}>
+												<Grid item xs={1}>
+													{listing.pricePerUnit}
+												</Grid>
+												<Grid item xs={1}>
+													{listing.quantity}
+												</Grid>
+												<Grid item xs={5}>
+													{listing.worldName}
+												</Grid>
+												<Grid item xs={5}>
+													{listing.timeString}
+												</Grid>
+											</Grid>
+										);
+									})}
 								</AccordionDetails>
 							</Accordion>
 						);
