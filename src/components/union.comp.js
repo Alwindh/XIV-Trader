@@ -1,14 +1,15 @@
 import React, { useState, useEffect } from "react";
 import BasicTable from "./unionTable.comp";
-import Container from "@mui/material/Container";
 import Axios from "axios";
-
+import Accordion from "@mui/material/Accordion";
+import AccordionSummary from "@mui/material/AccordionSummary";
+import AccordionDetails from "@mui/material/AccordionDetails";
 import { getItemIds, combineUnionData } from "../helpers/dataTools.helper";
 
 const loadData = require("../data/union.data.json");
 const itemIds = getItemIds(loadData);
 
-export default function UnionComp(props) {
+export default function UnionComp() {
 	const [tableData, setTableData] = useState();
 	const [loading, setLoading] = useState(true);
 
@@ -21,10 +22,11 @@ export default function UnionComp(props) {
 	}, []);
 
 	return (
-		!loading && (
-			<Container>
-				<BasicTable data={tableData} loading={loading} />
-			</Container>
-		)
+		<Accordion disabled={loading}>
+			<AccordionSummary>Union</AccordionSummary>
+			<AccordionDetails>
+				<BasicTable data={tableData} loading={loading} />{" "}
+			</AccordionDetails>
+		</Accordion>
 	);
 }
