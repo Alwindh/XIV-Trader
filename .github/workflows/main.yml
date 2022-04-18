@@ -1,0 +1,52 @@
+# This is a basic workflow to help you get started with Actions
+
+name: DeployToProd
+
+# Controls when the action will run. Triggers the workflow on push or pull request
+# events but only for the master branch
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  GIT_PULL:
+    runs-on: ubuntu-latest
+    name: Pull latest version to server
+    steps:
+      - name: git pull
+        uses: garygrossgarten/github-action-ssh@release
+        with:
+          command: cd ${{ secrets.DIRECTORY }} && git stash && git pull origin master
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USER }}
+          password: ${{ secrets.PASSWORD }}  
+  
+            
+  NPM_CI:
+    name: Set up NPM environment
+    needs: GIT_PULL
+    runs-on: ubuntu-latest
+    steps:
+      - name: npm ci
+        uses: garygrossgarten/github-action-ssh@release
+        with:
+          command: cd ${{ secrets.DIRECTORY }} && npm install
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USER }}
+          password: ${{ secrets.PASSWORD }}  
+    
+
+  BUILD:
+    name: Create optimized build
+    needs: NPM_CI
+    runs-on: ubuntu-latest
+    steps:
+      - name: npm run build
+        uses: garygrossgarten/github-action-ssh@release
+        with:
+          command: cd ${{ secrets.DIRECTORY }} && npm run build
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USER }}
+          password: ${{ secrets.PASSWORD }} 
