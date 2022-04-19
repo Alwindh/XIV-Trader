@@ -166,7 +166,7 @@ export function combineMountsData(mainList, responseObject) {
 	return newList;
 }
 
-function getDifferenceString(listingTime) {
+export function getDifferenceString(listingTime) {
 	const timeNow = new Date();
 	const timeUpdate = new Date(listingTime);
 	const timeDifference = timeNow.getTime() - timeUpdate.getTime();
@@ -187,7 +187,7 @@ function getDifferenceString(listingTime) {
 	}
 	const MinutesDifference =
 		Math.floor(timeDifference / (1000 * 60)) - (HoursDifference * 60 + DaysDifference * 24 * 60);
-	let MinutesDifferenceString = "";
+	let MinutesDifferenceString = "<1 minute";
 	let HourMinComma = HoursDifference > 0 ? ", " : "";
 
 	if (MinutesDifference === 1) {
@@ -195,7 +195,7 @@ function getDifferenceString(listingTime) {
 	} else if (MinutesDifference > 1) {
 		MinutesDifferenceString = HourMinComma + MinutesDifference + " minutes";
 	}
-	const timeDifferenceString = DaysDifferenceString + HoursDifferenceString + MinutesDifferenceString;
+	const timeDifferenceString = DaysDifferenceString + HoursDifferenceString + MinutesDifferenceString + " ago.";
 	return timeDifferenceString;
 }
 

@@ -7,8 +7,12 @@ import AccordionDetails from "@mui/material/AccordionDetails";
 import Typography from "@mui/material/Typography";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import Grid from "@mui/material/Grid";
+import LinearProgress from "@mui/material/LinearProgress";
+import Box from "@mui/material/Box";
+import Stack from "@mui/material/Stack";
+import { useInterval } from "../helpers/interval.helper";
 
-import { getItemIds, combineMountsData } from "../helpers/dataTools.helper";
+import { getItemIds, combineMountsData, getDifferenceString } from "../helpers/dataTools.helper";
 
 const loadData = require("../data/mounts.data.json");
 const itemIds = getItemIds(loadData);
@@ -17,41 +21,59 @@ export default function MountsComp(props) {
 	const [tableData, setTableData] = useState();
 	const [loading, setLoading] = useState(true);
 	const [updateTime, setUpdateTime] = useState();
-	const [refreshTime, setRefreshTime] = useState();
+	const [progress, setProgress] = useState(0);
 
 	useEffect(() => {
 		Axios.get("https://universalis.app/api/v2/light/" + itemIds).then((response) => {
 			let mountsData = combineMountsData(loadData, response.data);
 			setTableData(mountsData);
-			setRefreshTime(new Date().toString());
-			setUpdateTime(new Date().toString());
+			setUpdateTime(new Date());
 			setLoading(false);
 		});
 	}, []);
 
-	// useEffect(() => {
-	// 	setTimeout(() => {
-	// 		Axios.get("https://universalis.app/api/v2/light/" + itemIds).then((response) => {
-	// 			let mountsData = combineMountsData(loadData, response.data);
-	// 			console.log(mountsData !== tableData);
-	// 			if (mountsData !== tableData) {
-	// 				setUpdateTime(new Date().toString());
-	// 				setTableData(mountsData);
-	// 				console.log("did a thing");
-	// 			}
-	// 			setRefreshTime(new Date().toString());
+	useInterval(() => {
+		Axios.get("https://universalis.app/api/v2/light/" + itemIds).then((response) => {
+			let mountsData = combineMountsData(loadData, response.data);
+			if (JSON.stringify(mountsData) !== JSON.stringify(tableData)) {
+				setUpdateTime(new Date());
+				setTableData(mountsData);
+			}
+			setProgress(0);
+		});
+	}, 60000);
 
-	// 			console.log("REFRESHED");
-	// 			setLoading(false);
-	// 		});
-	// 	}, 60000);
-	// });
+	useEffect(() => {
+		const timer = setInterval(() => {
+			setProgress((prevProgress) => (prevProgress >= 100 ? 0 : prevProgress + (1 / 60) * 100));
+		}, 1000);
+		return () => {
+			clearInterval(timer);
+		};
+	}, [loading]);
 
 	if (!loading) {
 		return (
-			<Accordion>
+			<Accordion disabled={tableData.length === 0}>
 				<AccordionSummary>
-					Mounts {updateTime} {refreshTime}
+					<Box sx={{ width: "100%" }}>
+						<Stack spacing={2}>
+							<Grid container spacing={2}>
+								<Grid item xs={4}>
+									<Typography>Mounts</Typography>
+								</Grid>
+								<Grid item xs={8}>
+									<Typography sx={{ color: "text.secondary" }}>
+										{"Last updated " + getDifferenceString(updateTime)}
+									</Typography>
+								</Grid>
+							</Grid>
+
+							<Box sx={{ width: "100%" }}>
+								<LinearProgress variant="determinate" value={progress} />
+							</Box>
+						</Stack>
+					</Box>
 				</AccordionSummary>
 				<AccordionDetails>
 					{tableData.map((itemElement) => {

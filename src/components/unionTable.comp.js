@@ -3,8 +3,26 @@ import { DataGrid } from "@mui/x-data-grid";
 
 const columns = [
 	{ field: "itemName", headerName: "Item Name", flex: 150 },
-	{ field: "itemCost", type: "number", headerName: "Union Cost", flex: 100 },
-	{ field: "itemGilValue", type: "number", headerName: "Gil Value", flex: 100 },
+	{
+		field: "itemCost",
+		type: "number",
+		headerName: "Union Cost",
+		flex: 100,
+	},
+	{
+		field: "itemGilValue",
+		type: "number",
+		headerName: "Gil Value",
+		flex: 100,
+		valueFormatter: (params) => {
+			if (params.value == null) {
+				return "";
+			}
+
+			const valueFormatted = Number(params.value).toFixed(0).toLocaleString();
+			return `${valueFormatted}`;
+		},
+	},
 	{
 		field: "Score",
 		headerName: "Score",
