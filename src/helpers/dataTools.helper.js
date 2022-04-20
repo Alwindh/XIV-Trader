@@ -62,40 +62,26 @@ export function combineUnionData(mainList, responseObject) {
 	return newList;
 }
 
-export function combineFlippingData(mainList, responseObject, hqOnly = false) {
-	let newArray = mainList.slice();
-	newArray.forEach((itemElement) => {
-		const responseItem = responseObject.items[itemElement.itemId];
+export function combineFlippingData(mainList, responseObject) {
+	let returnArray = [];
+	mainList.forEach((itemElement) => {
+		let newElement = { itemName: itemElement.itemName, itemId: itemElement.itemId };
+		const responseItem = responseObject.items[newElement.itemId];
 		let lowerListings = [];
 		let lowestTwinListings = [];
-		if (itemElement.itemName.includes("Grade 6 Tincture") && hqOnly) {
-			responseItem.listings.every((listingElement) => {
-				if (listingElement.worldID === 33 && listingElement.hq) {
-					lowestTwinListings.push(listingElement.pricePerUnit);
-					if (lowestTwinListings.length >= 3) {
-						return false;
-					}
-				} else if (listingElement.hq) {
-					lowerListings.push(listingElement);
+		responseItem.listings.every((listingElement) => {
+			if (listingElement.worldID === 33) {
+				lowestTwinListings.push(listingElement.pricePerUnit);
+				if (lowestTwinListings.length >= 3) {
+					return false;
 				}
-				return true;
-			});
-		} else {
-			responseItem.listings.every((listingElement) => {
-				if (listingElement.worldID === 33) {
-					lowestTwinListings.push(listingElement.pricePerUnit);
-					if (lowestTwinListings.length >= 3) {
-						return false;
-					}
-				} else {
-					lowerListings.push(listingElement);
-				}
-				return true;
-			});
-		}
-
+			} else {
+				lowerListings.push(listingElement);
+			}
+			return true;
+		});
 		const lowestTwinPrice = getMedian(lowestTwinListings);
-		itemElement["lowestTwinPrice"] = lowestTwinPrice;
+		newElement["lowestTwinPrice"] = lowestTwinPrice;
 		const underCutValue = lowestTwinPrice * 0.75;
 		let viableListings = [];
 		let idCounter = 0;
@@ -106,17 +92,64 @@ export function combineFlippingData(mainList, responseObject, hqOnly = false) {
 				if (timeSinceUpdate === null || timeSinceUpdate < listingElement.lastReviewTime * 1000) {
 					timeSinceUpdate = listingElement.lastReviewTime * 1000;
 				}
-				listingElement["listingId"] = itemElement.itemId + "-" + idCounter;
+				listingElement["listingId"] = newElement.itemId + "-" + idCounter;
 				idCounter += 1;
 				viableListings.push(listingElement);
 			}
 		});
-		itemElement["viableListings"] = viableListings;
-
+		newElement["viableListings"] = viableListings;
 		const timeDifferenceString = getDifferenceString(timeSinceUpdate);
-		itemElement["timeSinceUpdate"] = timeDifferenceString;
+		newElement["timeSinceUpdate"] = timeDifferenceString;
+		returnArray.push(newElement);
 	});
-	return newArray;
+
+	mainList.forEach((itemElement) => {
+		let newElement = { itemName: itemElement.itemName + " HQ", itemId: itemElement.itemId };
+		const responseItem = responseObject.items[newElement.itemId];
+		let lowerListings = [];
+		let lowestTwinListings = [];
+		responseItem.listings.every((listingElement) => {
+			if (listingElement.worldID === 33 && listingElement.hq) {
+				lowestTwinListings.push(listingElement.pricePerUnit);
+				if (lowestTwinListings.length >= 3) {
+					return false;
+				}
+			} else if (listingElement.hq) {
+				lowerListings.push(listingElement);
+			}
+			return true;
+		});
+
+		const lowestTwinPrice = getMedian(lowestTwinListings);
+		newElement["lowestTwinPrice"] = lowestTwinPrice;
+		const underCutValue = lowestTwinPrice * 0.75;
+		let viableListings = [];
+		let idCounter = 0;
+		let timeSinceUpdate = null;
+		lowerListings.forEach((listingElement) => {
+			if (listingElement.pricePerUnit <= underCutValue) {
+				listingElement["timeString"] = getDifferenceString(listingElement.lastReviewTime * 1000);
+				if (timeSinceUpdate === null || timeSinceUpdate < listingElement.lastReviewTime * 1000) {
+					timeSinceUpdate = listingElement.lastReviewTime * 1000;
+				}
+				listingElement["listingId"] = newElement.itemId + "-" + idCounter;
+				idCounter += 1;
+				viableListings.push(listingElement);
+			}
+		});
+		newElement["viableListings"] = viableListings;
+		const timeDifferenceString = getDifferenceString(timeSinceUpdate);
+		newElement["timeSinceUpdate"] = timeDifferenceString;
+		returnArray.push(newElement);
+	});
+
+	let finalArray = [];
+	returnArray.forEach((element) => {
+		if (element.viableListings.length >= 1) {
+			finalArray.push(element);
+		}
+	});
+	return finalArray;
 }
 
 export function combineMountsData(mainList, responseObject) {
@@ -170,6 +203,7 @@ export function getDifferenceString(listingTime) {
 	const timeNow = new Date();
 	const timeUpdate = new Date(listingTime);
 	const timeDifference = timeNow.getTime() - timeUpdate.getTime();
+
 	const DaysDifference = Math.floor(timeDifference / (1000 * 60 * 60 * 24));
 	let DaysDifferenceString = "";
 	if (DaysDifference === 1) {
@@ -177,25 +211,39 @@ export function getDifferenceString(listingTime) {
 	} else if (DaysDifference > 1) {
 		DaysDifferenceString = DaysDifference + " days";
 	}
+
 	const HoursDifference = Math.floor(timeDifference / (1000 * 60 * 60)) - DaysDifference * 24;
 	let HoursDifferenceString = "";
-	let DayHourComma = DaysDifference > 0 ? ", " : "";
 	if (HoursDifference === 1) {
-		HoursDifferenceString = DayHourComma + HoursDifference + " hour";
+		HoursDifferenceString = HoursDifference + " hour";
 	} else if (HoursDifference > 1) {
-		HoursDifferenceString = DayHourComma + HoursDifference + " hours";
+		HoursDifferenceString = HoursDifference + " hours";
 	}
+
 	const MinutesDifference =
 		Math.floor(timeDifference / (1000 * 60)) - (HoursDifference * 60 + DaysDifference * 24 * 60);
-	let MinutesDifferenceString = "<1 minute";
-	let HourMinComma = HoursDifference > 0 ? ", " : "";
-
-	if (MinutesDifference === 1) {
-		MinutesDifferenceString = HourMinComma + MinutesDifference + " minute";
+	let MinutesDifferenceString = "";
+	if (MinutesDifference <= 1) {
+		MinutesDifferenceString = 1 + " minute";
 	} else if (MinutesDifference > 1) {
-		MinutesDifferenceString = HourMinComma + MinutesDifference + " minutes";
+		MinutesDifferenceString = MinutesDifference + " minutes";
 	}
-	const timeDifferenceString = DaysDifferenceString + HoursDifferenceString + MinutesDifferenceString + " ago.";
+
+	const stringArray = [DaysDifferenceString, HoursDifferenceString, MinutesDifferenceString];
+	let newArray = [];
+	for (let index = 0; index < stringArray.length; index++) {
+		const element = stringArray[index];
+		if (element.length > 1) {
+			newArray.push(element);
+		}
+	}
+	let timeDifferenceString = "";
+	for (let index = 0; index < newArray.length - 1; index++) {
+		const element = newArray[index];
+		timeDifferenceString += element + ", ";
+	}
+	timeDifferenceString += MinutesDifferenceString;
+	timeDifferenceString += " ago.";
 	return timeDifferenceString;
 }
 

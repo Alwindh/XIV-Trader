@@ -7,11 +7,9 @@ import AccordionDetails from "@mui/material/AccordionDetails";
 import Typography from "@mui/material/Typography";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import Grid from "@mui/material/Grid";
-import LinearProgress from "@mui/material/LinearProgress";
-import Box from "@mui/material/Box";
-import Stack from "@mui/material/Stack";
+import Paper from "@mui/material/Paper";
 import { useInterval } from "../helpers/interval.helper";
-
+import ComponentTopBar from "./compBar.comp";
 import { getItemIds, combineMountsData, getDifferenceString } from "../helpers/dataTools.helper";
 
 const loadData = require("../data/mounts.data.json");
@@ -22,8 +20,11 @@ export default function MountsComp(props) {
 	const [loading, setLoading] = useState(true);
 	const [updateTime, setUpdateTime] = useState();
 	const [progress, setProgress] = useState(0);
+	const [resetTimer, setResetTimer] = useState(true);
 
 	useEffect(() => {
+		setProgress(0);
+		setLoading(true);
 		Axios.get("https://universalis.app/api/v2/light/" + itemIds).then((response) => {
 			let mountsData = combineMountsData(loadData, response.data);
 			setTableData(mountsData);
@@ -33,6 +34,7 @@ export default function MountsComp(props) {
 	}, []);
 
 	useInterval(() => {
+		setResetTimer(!resetTimer);
 		Axios.get("https://universalis.app/api/v2/light/" + itemIds).then((response) => {
 			let mountsData = combineMountsData(loadData, response.data);
 			if (JSON.stringify(mountsData) !== JSON.stringify(tableData)) {
@@ -43,87 +45,77 @@ export default function MountsComp(props) {
 		});
 	}, 60000);
 
-	useEffect(() => {
-		const timer = setInterval(() => {
-			setProgress((prevProgress) => (prevProgress >= 100 ? 0 : prevProgress + (1 / 60) * 100));
-		}, 1000);
-		return () => {
-			clearInterval(timer);
-		};
-	}, [loading]);
+	// useEffect(() => {
+	// 	const timer = setInterval(() => {
+	// 		setProgress((prevProgress) => {
+	// 			if (prevProgress >= 100) {
+	// 				return 0;
+	// 			} else {
+	// 				return prevProgress + 10 / 6;
+	// 			}
+	// 		});
+	// 	}, 1000);
+	// 	return () => {
+	// 		clearInterval(timer);
+	// 	};
+	// }, [loading]);
 
 	if (!loading) {
 		return (
-			<Accordion disabled={tableData.length === 0}>
-				<AccordionSummary>
-					<Box sx={{ width: "100%" }}>
-						<Stack spacing={2}>
-							<Grid container spacing={2}>
-								<Grid item xs={4}>
-									<Typography>Mounts</Typography>
-								</Grid>
-								<Grid item xs={8}>
-									<Typography sx={{ color: "text.secondary" }}>
-										{"Last updated " + getDifferenceString(updateTime)}
-									</Typography>
-								</Grid>
-							</Grid>
-
-							<Box sx={{ width: "100%" }}>
-								<LinearProgress variant="determinate" value={progress} />
-							</Box>
-						</Stack>
-					</Box>
-				</AccordionSummary>
-				<AccordionDetails>
-					{tableData.map((itemElement) => {
-						return (
-							<Accordion key={itemElement.itemId}>
-								<AccordionSummary
-									expandIcon={<ExpandMoreIcon />}
-									aria-controls="panel1a-content"
-									id="panel1a-header"
-								>
-									<Typography sx={{ width: "33%", flexShrink: 0 }}>{itemElement.itemName}</Typography>
-									<Typography sx={{ width: "33%", color: "text.secondary" }}>
-										{itemElement.undercutFactor.toFixed(2) * 100 + "%"}
-									</Typography>
-									<Typography sx={{ width: "33%", color: "text.secondary" }}>
-										{itemElement.timeSinceUpdate}
-									</Typography>
-								</AccordionSummary>
-								<AccordionDetails>
-									{itemElement.mountListings.map((listing) => {
-										return (
-											<Grid container spacing={2} key={listing.listingId}>
-												<Grid item xs={1}>
-													{listing.pricePerUnit}
-												</Grid>
-												<Grid item xs={1}>
-													{listing.quantity}
-												</Grid>
-												<Grid item xs={5}>
-													{listing.worldName}
-												</Grid>
-												<Grid item xs={5}>
-													{listing.timeString}
-												</Grid>
+			<Paper style={{ marginBottom: "1em" }}>
+				<ComponentTopBar
+					barName="Mounts"
+					updateTime={getDifferenceString(updateTime)}
+					resetTimer={resetTimer}
+				/>
+				{tableData.map((itemElement) => {
+					return (
+						<Accordion key={itemElement.itemId}>
+							<AccordionSummary
+								expandIcon={<ExpandMoreIcon />}
+								aria-controls="panel1a-content"
+								id="panel1a-header"
+							>
+								<Typography sx={{ width: "33%", flexShrink: 0 }}>{itemElement.itemName}</Typography>
+								<Typography sx={{ width: "33%", color: "text.secondary" }}>
+									{itemElement.undercutFactor.toFixed(2) * 100 + "%"}
+								</Typography>
+								<Typography sx={{ width: "33%", color: "text.secondary" }}>
+									{itemElement.timeSinceUpdate}
+								</Typography>
+							</AccordionSummary>
+							<AccordionDetails>
+								{itemElement.mountListings.map((listing) => {
+									return (
+										<Grid container spacing={2} key={listing.listingId}>
+											<Grid item xs={1}>
+												{listing.pricePerUnit}
 											</Grid>
-										);
-									})}
-								</AccordionDetails>
-							</Accordion>
-						);
-					})}
-				</AccordionDetails>
-			</Accordion>
+											<Grid item xs={1}>
+												{listing.quantity}
+											</Grid>
+											<Grid item xs={5}>
+												{listing.worldName}
+											</Grid>
+											<Grid item xs={5}>
+												{listing.timeString}
+											</Grid>
+										</Grid>
+									);
+								})}
+							</AccordionDetails>
+						</Accordion>
+					);
+				})}
+			</Paper>
 		);
 	} else {
 		return (
-			<Accordion disabled={loading}>
-				<AccordionSummary>Mounts - loading...</AccordionSummary>
-				<AccordionDetails>null</AccordionDetails>
-			</Accordion>
+			<ComponentTopBar
+				barName="Mounts - Loading..."
+				progress={progress}
+				updateTime={getDifferenceString(updateTime)}
+			/>
 		);
 	}
 }
