@@ -22,7 +22,7 @@ export default function UnionComp() {
 	}, []);
 
 	return (
-		<Accordion disabled={loading}>
+		<Accordion disabled={loading} style={{ marginBottom: "1em" }}>
 			<AccordionSummary>Union</AccordionSummary>
 			<AccordionDetails>
 				<BasicTable data={tableData} loading={loading} />{" "}
