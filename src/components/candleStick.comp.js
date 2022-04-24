@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from "react";
-import Axios from "axios";
 import Chart from "react-apexcharts";
+import CircularProgress from "@mui/material/CircularProgress";
+import Box from "@mui/material/Box";
 
-export default function UnionComp() {
+export default function UnionComp(props) {
 	const [barData, setBarData] = useState();
 	const [barOptions] = useState({
 		chart: {
@@ -21,6 +22,18 @@ export default function UnionComp() {
 				enabled: true,
 			},
 		},
+		noData: {
+			text: "Loading data...",
+			align: "center",
+			verticalAlign: "middle",
+			offsetX: 0,
+			offsetY: 0,
+			style: {
+				color: undefined,
+				fontSize: "14px",
+				fontFamily: undefined,
+			},
+		},
 	});
 
 	function generateCandleStick(inputData) {
@@ -28,11 +41,8 @@ export default function UnionComp() {
 		const copyData = inputData.entries.slice();
 		copyData.forEach((entry) => {
 			let dateObject = new Date(entry.timestamp * 1000);
-			let closestHours = 0;
-			if (dateObject.getHours() >= 12) {
-				closestHours = 12;
-			}
-			dateObject.setHours(closestHours);
+
+			dateObject.setHours(0);
 			dateObject.setMinutes(0);
 			dateObject.setSeconds(0);
 			const unixStamp = Math.floor(dateObject.getTime() / 1000);
@@ -47,9 +57,6 @@ export default function UnionComp() {
 			priceArray[key] = [];
 			sortingArray[key].forEach((listing) => {
 				priceArray[key].push(listing.pricePerUnit);
-				// for (let index = 0; index < listing.quantity; index++) {
-				// 	priceArray[key].push(listing.pricePerUnit);
-				// }
 			});
 		}
 		let candleStickArray = [];
@@ -58,8 +65,8 @@ export default function UnionComp() {
 			listingPrices.sort(function (a, b) {
 				return a - b;
 			});
-			const minPrice = listingPrices[1];
-			const maxPrice = listingPrices[listingPrices.length - 2];
+			const minPrice = listingPrices[0];
+			const maxPrice = listingPrices[listingPrices.length - 1];
 			const lowerQuart = listingPrices[Math.floor(listingPrices.length * 0.25)];
 			const upperQuart = listingPrices[Math.floor(listingPrices.length * 0.75)];
 			const median = listingPrices[Math.floor(listingPrices.length * 0.5)];
@@ -71,16 +78,22 @@ export default function UnionComp() {
 	}
 
 	useEffect(() => {
-		Axios.get("https://universalis.app/api/history/light/37279?entries=999999").then((response) => {
-			generateCandleStick(response.data);
-		});
-	}, []);
+		if (props.inputData) {
+			generateCandleStick(props.inputData);
+		}
+	}, [props]);
 
 	if (barData) {
 		return (
 			<div id="chart">
 				<Chart options={barOptions} series={barData} type="boxPlot" height={350} />
 			</div>
+		);
+	} else {
+		return (
+			<Box sx={{ display: "flex" }}>
+				<CircularProgress />
+			</Box>
 		);
 	}
 }

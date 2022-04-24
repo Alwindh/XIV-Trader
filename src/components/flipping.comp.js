@@ -16,10 +16,22 @@ export default function FlippingComp() {
 	const [updateTime, setUpdateTime] = useState();
 	const [progress, setProgress] = useState(0);
 	const [resetTimer, setResetTimer] = useState(true);
+	const [candleStickData, setCandleStickData] = useState({});
 
 	useEffect(() => {
 		setLoading(true);
 		setProgress(0);
+		Axios.get(
+			"https://universalis.app/api/history/33/" +
+				itemIds +
+				"?entries=999999&statsWithin=2678400&entriesWithin=2678400"
+		).then((response) => {
+			let candleStickArray = {};
+			response.data.items.forEach((itemListing) => {
+				candleStickArray[itemListing.itemID] = itemListing;
+			});
+			setCandleStickData(candleStickArray);
+		});
 		Axios.get("https://universalis.app/api/v2/light/" + itemIds).then((response) => {
 			let flippingData = combineFlippingData(loadData, response.data);
 			setTableData(flippingData);
@@ -49,7 +61,13 @@ export default function FlippingComp() {
 					updateTime={getDifferenceString(updateTime)}
 				/>
 				{tableData.map((itemElement) => {
-					return <FlippingItem inputItem={itemElement} key={itemElement.itemName} />;
+					return (
+						<FlippingItem
+							inputItem={itemElement}
+							key={itemElement.itemName}
+							inputData={candleStickData[itemElement.itemId]}
+						/>
+					);
 				})}
 			</Paper>
 		);
