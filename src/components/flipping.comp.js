@@ -49,7 +49,7 @@ export default function FlippingComp() {
 					updateTime={getDifferenceString(updateTime)}
 				/>
 				{tableData.map((itemElement) => {
-					return <FlippingItem inputItem={itemElement} />;
+					return <FlippingItem inputItem={itemElement} key={itemElement.itemName} />;
 				})}
 			</Paper>
 		);

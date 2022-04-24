@@ -172,7 +172,7 @@ export function combineMountsData(mainList, responseObject) {
 		// itemElement["lowestTwinPrice"] = lowestTwinPrice;
 		// const underCutValue = lowestTwinPrice * 0.75;
 		// let viableListings = [];
-		// let idCounter = 0;
+		let idCounter = 0;
 		let timeSinceUpdate = null;
 		mountListings.forEach((listingElement) => {
 			// 	if (listingElement.pricePerUnit <= underCutValue) {
@@ -180,8 +180,8 @@ export function combineMountsData(mainList, responseObject) {
 			if (timeSinceUpdate === null || timeSinceUpdate < listingElement.lastReviewTime * 1000) {
 				timeSinceUpdate = listingElement.lastReviewTime * 1000;
 			}
-			// 		listingElement["listingId"] = itemElement.itemId + "-" + idCounter;
-			// 		idCounter += 1;
+			listingElement["listingId"] = itemElement.itemId + "-" + idCounter;
+			idCounter += 1;
 			// 		viableListings.push(listingElement);
 			// }
 		});
