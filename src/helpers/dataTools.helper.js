@@ -68,29 +68,22 @@ export function combineFlippingData(mainList, responseObject, lowestTwinPrices) 
 		let newElement = { itemName: itemElement.itemName, itemId: itemElement.itemId };
 		const responseItem = responseObject.items[newElement.itemId];
 		let lowerListings = [];
-		let lowestTwinListings = [];
+		newElement["lowestTwinPrice"] = lowestTwinPrices[newElement.itemId];
+		const underCutValue = newElement["lowestTwinPrice"] * 0.75;
+
 		responseItem.listings.every((listingElement) => {
-			if (listingElement.worldID === 33) {
-				lowestTwinListings.push(listingElement.pricePerUnit);
-				if (lowestTwinListings.length >= 3) {
-					return false;
-				}
-			} else {
+			if (listingElement.worldID !== 33 && listingElement.pricePerUnit < underCutValue) {
 				lowerListings.push(listingElement);
+			} else if (listingElement.pricePerUnit >= underCutValue) {
+				return false;
 			}
 			return true;
 		});
-		// const lowestTwinPrice =
-		// 	candleStickArray[newElement.itemId].entries[
-		// 		Math.floor(candleStickArray[newElement.itemId].entries.length * 0.9)
-		// 	].pricePerUnit;
 
-		// const lowestTwinPrice = getMedian(lowestTwinListings);
-		newElement["lowestTwinPrice"] = lowestTwinPrices[newElement.itemId];
-		const underCutValue = newElement["lowestTwinPrice"] * 0.75;
 		let viableListings = [];
 		let idCounter = 0;
 		let timeSinceUpdate = null;
+
 		lowerListings.forEach((listingElement) => {
 			if (listingElement.pricePerUnit <= underCutValue) {
 				listingElement["timeString"] = getDifferenceString(listingElement.lastReviewTime * 1000);
@@ -102,6 +95,7 @@ export function combineFlippingData(mainList, responseObject, lowestTwinPrices) 
 				viableListings.push(listingElement);
 			}
 		});
+
 		newElement["viableListings"] = viableListings;
 		const timeDifferenceString = getDifferenceString(timeSinceUpdate);
 		newElement["timeSinceUpdate"] = timeDifferenceString;
@@ -112,25 +106,22 @@ export function combineFlippingData(mainList, responseObject, lowestTwinPrices) 
 		let newElement = { itemName: itemElement.itemName + " HQ", itemId: itemElement.itemId };
 		const responseItem = responseObject.items[newElement.itemId];
 		let lowerListings = [];
-		let lowestTwinListings = [];
+		newElement["lowestTwinPrice"] = lowestTwinPrices[newElement.itemId];
+		const underCutValue = newElement["lowestTwinPrice"] * 0.75;
+
 		responseItem.listings.every((listingElement) => {
-			if (listingElement.worldID === 33 && listingElement.hq) {
-				lowestTwinListings.push(listingElement.pricePerUnit);
-				if (lowestTwinListings.length >= 3) {
-					return false;
-				}
-			} else if (listingElement.hq) {
+			if (listingElement.worldID !== 33 && listingElement.pricePerUnit < underCutValue && listingElement.hq) {
 				lowerListings.push(listingElement);
+			} else if (listingElement.pricePerUnit >= underCutValue) {
+				return false;
 			}
 			return true;
 		});
 
-		const lowestTwinPrice = getMedian(lowestTwinListings);
-		newElement["lowestTwinPrice"] = lowestTwinPrice;
-		const underCutValue = lowestTwinPrice * 0.75;
 		let viableListings = [];
 		let idCounter = 0;
 		let timeSinceUpdate = null;
+
 		lowerListings.forEach((listingElement) => {
 			if (listingElement.pricePerUnit <= underCutValue) {
 				listingElement["timeString"] = getDifferenceString(listingElement.lastReviewTime * 1000);
@@ -142,6 +133,7 @@ export function combineFlippingData(mainList, responseObject, lowestTwinPrices) 
 				viableListings.push(listingElement);
 			}
 		});
+
 		newElement["viableListings"] = viableListings;
 		const timeDifferenceString = getDifferenceString(timeSinceUpdate);
 		newElement["timeSinceUpdate"] = timeDifferenceString;
@@ -149,11 +141,13 @@ export function combineFlippingData(mainList, responseObject, lowestTwinPrices) 
 	});
 
 	let finalArray = [];
+
 	returnArray.forEach((element) => {
 		if (element.viableListings.length >= 1) {
 			finalArray.push(element);
 		}
 	});
+
 	return finalArray;
 }
 
@@ -173,24 +167,15 @@ export function combineMountsData(mainList, responseObject) {
 		itemElement["undercutFactor"] =
 			mountListings[0].pricePerUnit / mountListings[mountListings.length - 1].pricePerUnit;
 
-		// const lowestTwinPrice = getMedian(lowestTwinListings);
-		// itemElement["lowestTwinPrice"] = lowestTwinPrice;
-		// const underCutValue = lowestTwinPrice * 0.75;
-		// let viableListings = [];
 		let idCounter = 0;
 		let timeSinceUpdate = null;
 		mountListings.forEach((listingElement) => {
-			// 	if (listingElement.pricePerUnit <= underCutValue) {
-			// 		listingElement["timeString"] = getDifferenceString(listingElement.lastReviewTime * 1000);
 			if (timeSinceUpdate === null || timeSinceUpdate < listingElement.lastReviewTime * 1000) {
 				timeSinceUpdate = listingElement.lastReviewTime * 1000;
 			}
 			listingElement["listingId"] = itemElement.itemId + "-" + idCounter;
 			idCounter += 1;
-			// 		viableListings.push(listingElement);
-			// }
 		});
-		// itemElement["viableListings"] = viableListings;
 
 		const timeDifferenceString = getDifferenceString(timeSinceUpdate);
 		itemElement["timeSinceUpdate"] = timeDifferenceString;
