@@ -62,7 +62,7 @@ export function combineUnionData(mainList, responseObject) {
 	return newList;
 }
 
-export function combineFlippingData(mainList, responseObject) {
+export function combineFlippingData(mainList, responseObject, lowestTwinPrices) {
 	let returnArray = [];
 	mainList.forEach((itemElement) => {
 		let newElement = { itemName: itemElement.itemName, itemId: itemElement.itemId };
@@ -80,9 +80,14 @@ export function combineFlippingData(mainList, responseObject) {
 			}
 			return true;
 		});
-		const lowestTwinPrice = getMedian(lowestTwinListings);
-		newElement["lowestTwinPrice"] = lowestTwinPrice;
-		const underCutValue = lowestTwinPrice * 0.75;
+		// const lowestTwinPrice =
+		// 	candleStickArray[newElement.itemId].entries[
+		// 		Math.floor(candleStickArray[newElement.itemId].entries.length * 0.9)
+		// 	].pricePerUnit;
+
+		// const lowestTwinPrice = getMedian(lowestTwinListings);
+		newElement["lowestTwinPrice"] = lowestTwinPrices[newElement.itemId];
+		const underCutValue = newElement["lowestTwinPrice"] * 0.75;
 		let viableListings = [];
 		let idCounter = 0;
 		let timeSinceUpdate = null;
@@ -132,7 +137,7 @@ export function combineFlippingData(mainList, responseObject) {
 				if (timeSinceUpdate === null || timeSinceUpdate < listingElement.lastReviewTime * 1000) {
 					timeSinceUpdate = listingElement.lastReviewTime * 1000;
 				}
-				listingElement["listingId"] = newElement.itemId + "-" + idCounter;
+				listingElement["listingId"] = newElement.itemId + "-HQ-" + idCounter;
 				idCounter += 1;
 				viableListings.push(listingElement);
 			}
@@ -245,6 +250,19 @@ export function getDifferenceString(listingTime) {
 	timeDifferenceString += MinutesDifferenceString;
 	timeDifferenceString += " ago.";
 	return timeDifferenceString;
+}
+
+export function getLowerQuarts(historyResponse) {
+	let lowerQuartArray = [];
+	historyResponse.items.forEach((itemObject) => {
+		let pricesArray = [];
+		itemObject.entries.forEach((itemEntry) => {
+			pricesArray.push(itemEntry.pricePerUnit);
+		});
+		pricesArray = [...pricesArray].sort((a, b) => a - b);
+		lowerQuartArray[itemObject.itemID] = pricesArray[Math.floor(pricesArray.length * 0.1)];
+	});
+	return lowerQuartArray;
 }
 
 function getStdev(array) {

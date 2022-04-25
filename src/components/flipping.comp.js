@@ -3,7 +3,7 @@ import { useInterval } from "../helpers/interval.helper";
 import Axios from "axios";
 import Paper from "@mui/material/Paper";
 
-import { getItemIds, combineFlippingData, getDifferenceString } from "../helpers/dataTools.helper";
+import { getItemIds, combineFlippingData, getDifferenceString, getLowerQuarts } from "../helpers/dataTools.helper";
 import ComponentTopBar from "./compBar.comp";
 import FlippingItem from "./flippingItem.comp";
 
@@ -12,6 +12,8 @@ const itemIds = getItemIds(loadData);
 
 export default function FlippingComp() {
 	const [tableData, setTableData] = useState();
+	const [historyResponse, setHistoryResponse] = useState();
+	const [listingsResponse, setListingsResponse] = useState();
 	const [loading, setLoading] = useState(true);
 	const [updateTime, setUpdateTime] = useState();
 	const [progress, setProgress] = useState(0);
@@ -26,19 +28,28 @@ export default function FlippingComp() {
 				itemIds +
 				"?entries=999999&statsWithin=2678400&entriesWithin=2678400"
 		).then((response) => {
+			setHistoryResponse(response.data);
+		});
+		Axios.get("https://universalis.app/api/v2/light/" + itemIds).then((response) => {
+			setListingsResponse(response.data);
+		});
+	}, []);
+
+	useEffect(() => {
+		if (historyResponse && listingsResponse) {
+			console.log("got both");
 			let candleStickArray = {};
-			response.data.items.forEach((itemListing) => {
+			historyResponse.items.forEach((itemListing) => {
 				candleStickArray[itemListing.itemID] = itemListing;
 			});
 			setCandleStickData(candleStickArray);
-		});
-		Axios.get("https://universalis.app/api/v2/light/" + itemIds).then((response) => {
-			let flippingData = combineFlippingData(loadData, response.data);
+			const lowerQuartArray = getLowerQuarts(historyResponse);
+			let flippingData = combineFlippingData(loadData, listingsResponse, lowerQuartArray);
 			setTableData(flippingData);
 			setUpdateTime(new Date());
 			setLoading(false);
-		});
-	}, []);
+		}
+	}, [historyResponse, listingsResponse]);
 
 	useInterval(() => {
 		setResetTimer(!resetTimer);
