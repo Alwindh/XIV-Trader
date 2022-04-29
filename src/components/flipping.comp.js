@@ -37,7 +37,6 @@ export default function FlippingComp() {
 
 	useEffect(() => {
 		if (historyResponse && listingsResponse) {
-			console.log("got both");
 			let candleStickArray = {};
 			historyResponse.items.forEach((itemListing) => {
 				candleStickArray[itemListing.itemID] = itemListing;
@@ -54,10 +53,9 @@ export default function FlippingComp() {
 	useInterval(() => {
 		setResetTimer(!resetTimer);
 		Axios.get("https://universalis.app/api/v2/light/" + itemIds).then((response) => {
-			let refreshFlippingData = combineFlippingData(loadData, response.data);
-			if (JSON.stringify(refreshFlippingData) !== JSON.stringify(tableData)) {
+			if (JSON.stringify(response.data) !== JSON.stringify(listingsResponse)) {
 				setUpdateTime(new Date());
-				setTableData(refreshFlippingData);
+				setListingsResponse(response.data);
 			}
 			setProgress(0);
 		});

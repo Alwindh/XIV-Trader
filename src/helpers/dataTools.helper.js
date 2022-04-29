@@ -106,7 +106,7 @@ export function combineFlippingData(mainList, responseObject, lowestTwinPrices) 
 		let newElement = { itemName: itemElement.itemName + " HQ", itemId: itemElement.itemId };
 		const responseItem = responseObject.items[newElement.itemId];
 		let lowerListings = [];
-		newElement["lowestTwinPrice"] = lowestTwinPrices[newElement.itemId];
+		newElement["lowestTwinPrice"] = lowestTwinPrices[newElement.itemId + "_HQ"];
 		const underCutValue = newElement["lowestTwinPrice"] * 0.75;
 
 		responseItem.listings.every((listingElement) => {
@@ -245,7 +245,17 @@ export function getLowerQuarts(historyResponse) {
 			pricesArray.push(itemEntry.pricePerUnit);
 		});
 		pricesArray = [...pricesArray].sort((a, b) => a - b);
-		lowerQuartArray[itemObject.itemID] = pricesArray[Math.floor(pricesArray.length * 0.1)];
+		lowerQuartArray[itemObject.itemID] = pricesArray[Math.floor(pricesArray.length * 0.05)];
+	});
+	historyResponse.items.forEach((itemObject) => {
+		let pricesArray = [];
+		itemObject.entries.forEach((itemEntry) => {
+			if (itemEntry.hq) {
+				pricesArray.push(itemEntry.pricePerUnit);
+			}
+		});
+		pricesArray = [...pricesArray].sort((a, b) => a - b);
+		lowerQuartArray[itemObject.itemID + "_HQ"] = pricesArray[Math.floor(pricesArray.length * 0.05)];
 	});
 	return lowerQuartArray;
 }
