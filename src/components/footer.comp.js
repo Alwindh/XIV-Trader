@@ -12,7 +12,7 @@ export default function FooterBar(props) {
 				color="transparent"
 				style={{ bottom: "0", top: "revert", alignItems: "center", backgroundColor: "rgba(0, 0, 0, 0.2)" }}
 			>
-				build {loadData.commit}
+				build {loadData.commit.slice(0, 7)}
 			</AppBar>
 		</Box>
 	);
