@@ -3,7 +3,7 @@ import { useInterval } from "../helpers/interval.helper";
 import Axios from "axios";
 import Paper from "@mui/material/Paper";
 
-import { getItemIds, combineFlippingData, getDifferenceString, getLowerQuarts } from "../helpers/dataTools.helper";
+import { getItemIds, combineFlippingData, getDifferenceString, getLowPrices } from "../helpers/dataTools.helper";
 import ComponentTopBar from "./compBar.comp";
 import FlippingItem from "./flippingItem.comp";
 
@@ -12,13 +12,13 @@ const itemIds = getItemIds(loadData);
 
 export default function FlippingComp() {
 	const [tableData, setTableData] = useState();
-	const [historyResponse, setHistoryResponse] = useState();
+	const [historyPrices, sethistoryPrices] = useState();
 	const [listingsResponse, setListingsResponse] = useState();
 	const [loading, setLoading] = useState(true);
 	const [updateTime, setUpdateTime] = useState();
 	const [progress, setProgress] = useState(0);
 	const [resetTimer, setResetTimer] = useState(true);
-	const [candleStickData, setCandleStickData] = useState({});
+	const [boxPlotData, setboxPlotData] = useState({});
 
 	useEffect(() => {
 		setLoading(true);
@@ -28,7 +28,13 @@ export default function FlippingComp() {
 				itemIds +
 				"?entries=999999&statsWithin=2678400&entriesWithin=2678400"
 		).then((response) => {
-			setHistoryResponse(response.data);
+			const lowPrices = getLowPrices(response.data);
+			let candleStickArray = {};
+			response.data.items.forEach((itemListing) => {
+				candleStickArray[itemListing.itemID] = itemListing;
+			});
+			setboxPlotData(candleStickArray);
+			sethistoryPrices(lowPrices);
 		});
 		Axios.get("https://universalis.app/api/v2/light/" + itemIds).then((response) => {
 			setListingsResponse(response.data);
@@ -36,19 +42,13 @@ export default function FlippingComp() {
 	}, []);
 
 	useEffect(() => {
-		if (historyResponse && listingsResponse) {
-			let candleStickArray = {};
-			historyResponse.items.forEach((itemListing) => {
-				candleStickArray[itemListing.itemID] = itemListing;
-			});
-			setCandleStickData(candleStickArray);
-			const lowerQuartArray = getLowerQuarts(historyResponse);
-			let flippingData = combineFlippingData(loadData, listingsResponse, lowerQuartArray);
+		if (historyPrices && listingsResponse) {
+			let flippingData = combineFlippingData(loadData, listingsResponse, historyPrices);
 			setTableData(flippingData);
 			setUpdateTime(new Date());
 			setLoading(false);
 		}
-	}, [historyResponse, listingsResponse]);
+	}, [historyPrices, listingsResponse]);
 
 	useInterval(() => {
 		setResetTimer(!resetTimer);
@@ -74,7 +74,7 @@ export default function FlippingComp() {
 						<FlippingItem
 							inputItem={itemElement}
 							key={itemElement.itemName}
-							inputData={candleStickData[itemElement.itemId]}
+							inputData={boxPlotData[itemElement.itemId]}
 						/>
 					);
 				})}

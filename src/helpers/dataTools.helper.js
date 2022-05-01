@@ -237,7 +237,7 @@ export function getDifferenceString(listingTime) {
 	return timeDifferenceString;
 }
 
-export function getLowerQuarts(historyResponse) {
+export function getLowPrices(historyResponse) {
 	let lowerQuartArray = [];
 	historyResponse.items.forEach((itemObject) => {
 		let pricesArray = [];
