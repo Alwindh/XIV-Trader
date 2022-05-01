@@ -11,13 +11,15 @@ export default function ComponentTopBar(props) {
 			<AppBar position="static" style={{ paddingTop: "1em", paddingBottom: "1em" }}>
 				<Grid container spacing={2}>
 					<Grid item xs={4}>
-						<Typography style={{ marginLeft: "1em" }}>{props.barName}</Typography>
+						<Typography style={{ marginLeft: "1em", fontSize: "1.2em", fontWeight: "bold" }}>
+							{props.barName}
+						</Typography>
 					</Grid>
 					<Grid item xs={7}>
 						<Typography>{"Last updated " + props.updateTime}</Typography>
 					</Grid>
 					<Grid item xs={1} style={{ textAlign: "right" }}>
-						<TimerBubble resetTimer={props.resetTimer} />
+						{props.resetTimer !== undefined ? <TimerBubble resetTimer={props.resetTimer} /> : null}
 					</Grid>
 				</Grid>
 			</AppBar>
