@@ -72,7 +72,7 @@ export function combineFlippingData(mainList, responseObject, lowestTwinPrices) 
 		const underCutValue = newElement["lowestTwinPrice"] * 0.75;
 
 		responseItem.listings.every((listingElement) => {
-			if (listingElement.worldID !== 33 && listingElement.pricePerUnit < underCutValue) {
+			if (listingElement.pricePerUnit < underCutValue) {
 				lowerListings.push(listingElement);
 			} else if (listingElement.pricePerUnit >= underCutValue) {
 				return false;
@@ -110,7 +110,7 @@ export function combineFlippingData(mainList, responseObject, lowestTwinPrices) 
 		const underCutValue = newElement["lowestTwinPrice"] * 0.75;
 
 		responseItem.listings.every((listingElement) => {
-			if (listingElement.worldID !== 33 && listingElement.pricePerUnit < underCutValue && listingElement.hq) {
+			if (listingElement.pricePerUnit < underCutValue && listingElement.hq) {
 				lowerListings.push(listingElement);
 			} else if (listingElement.pricePerUnit >= underCutValue) {
 				return false;
@@ -157,7 +157,7 @@ export function combineMountsData(mainList, responseObject) {
 		let mountListings = [];
 		responseItem.listings.every((listingElement) => {
 			mountListings.push(listingElement);
-			if (mountListings.length >= 5) {
+			if (mountListings.length >= 3) {
 				return false;
 			}
 
