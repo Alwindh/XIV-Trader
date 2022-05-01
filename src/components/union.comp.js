@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from "react";
 import BasicTable from "./unionTable.comp";
 import Axios from "axios";
-import Accordion from "@mui/material/Accordion";
-import AccordionSummary from "@mui/material/AccordionSummary";
-import AccordionDetails from "@mui/material/AccordionDetails";
-import { getItemIds, combineUnionData } from "../helpers/dataTools.helper";
+
+import { getItemIds, combineUnionData, getDifferenceString } from "../helpers/dataTools.helper";
+import ComponentTopBar from "./compBar.comp";
+import { Paper } from "@mui/material";
 
 const loadData = require("../data/union.data.json");
 const itemIds = getItemIds(loadData);
@@ -22,11 +22,9 @@ export default function UnionComp() {
 	}, []);
 
 	return (
-		<Accordion disabled={loading} style={{ marginBottom: "1em" }}>
-			<AccordionSummary>Union</AccordionSummary>
-			<AccordionDetails>
-				<BasicTable data={tableData} loading={loading} />{" "}
-			</AccordionDetails>
-		</Accordion>
+		<Paper style={{ marginBottom: "1em" }}>
+			<ComponentTopBar barName="Union" updateTime={getDifferenceString(new Date())} />
+			<BasicTable data={tableData} loading={loading} />
+		</Paper>
 	);
 }

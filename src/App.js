@@ -8,8 +8,8 @@ function App() {
 	return (
 		<Container style={{ marginTop: "1em" }}>
 			<FlippingComp />
-			<UnionComp />
 			<MountsComp />
+			<UnionComp />
 		</Container>
 	);
 }
