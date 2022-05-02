@@ -68,45 +68,47 @@ export default function MountsComp(props) {
 					updateTime={getDifferenceString(updateTime)}
 					resetTimer={resetTimer}
 				/>
-				{tableData.map((itemElement) => {
-					return (
-						<Accordion key={itemElement.itemId}>
-							<AccordionSummary
-								expandIcon={<ExpandMoreIcon />}
-								aria-controls="panel1a-content"
-								id="panel1a-header"
-							>
-								<Typography sx={{ width: "33%", flexShrink: 0 }}>{itemElement.itemName}</Typography>
-								<Typography sx={{ width: "33%", color: "text.secondary" }}>
-									{itemElement.undercutFactor.toFixed(2) * 100 + "%"}
-								</Typography>
-								<Typography sx={{ width: "33%", color: "text.secondary" }}>
-									{itemElement.timeSinceUpdate}
-								</Typography>
-							</AccordionSummary>
-							<AccordionDetails>
-								{itemElement.mountListings.map((listing) => {
-									return (
-										<Grid container spacing={2} key={listing.listingId}>
-											<Grid item xs={1}>
-												{listing.pricePerUnit}
+				<div className="dataHolder">
+					{tableData.map((itemElement) => {
+						return (
+							<Accordion key={itemElement.itemId}>
+								<AccordionSummary
+									expandIcon={<ExpandMoreIcon />}
+									aria-controls="panel1a-content"
+									id="panel1a-header"
+								>
+									<Typography sx={{ width: "33%", flexShrink: 0 }}>{itemElement.itemName}</Typography>
+									<Typography sx={{ width: "33%", color: "text.secondary" }}>
+										{itemElement.undercutFactor.toFixed(2) * 100 + "%"}
+									</Typography>
+									<Typography sx={{ width: "33%", color: "text.secondary" }}>
+										{itemElement.timeSinceUpdate}
+									</Typography>
+								</AccordionSummary>
+								<AccordionDetails>
+									{itemElement.mountListings.map((listing) => {
+										return (
+											<Grid container spacing={2} key={listing.listingId}>
+												<Grid item xs={1}>
+													{listing.pricePerUnit}
+												</Grid>
+												<Grid item xs={1}>
+													{listing.quantity}
+												</Grid>
+												<Grid item xs={5}>
+													{listing.worldName}
+												</Grid>
+												<Grid item xs={5}>
+													{listing.timeString}
+												</Grid>
 											</Grid>
-											<Grid item xs={1}>
-												{listing.quantity}
-											</Grid>
-											<Grid item xs={5}>
-												{listing.worldName}
-											</Grid>
-											<Grid item xs={5}>
-												{listing.timeString}
-											</Grid>
-										</Grid>
-									);
-								})}
-							</AccordionDetails>
-						</Accordion>
-					);
-				})}
+										);
+									})}
+								</AccordionDetails>
+							</Accordion>
+						);
+					})}
+				</div>
 			</Paper>
 		);
 	} else {

@@ -46,9 +46,14 @@ export default function FlippingComp() {
 			let flippingData = combineFlippingData(loadData, listingsResponse, historyPrices);
 			setTableData(flippingData);
 			setUpdateTime(new Date());
-			setLoading(false);
 		}
 	}, [historyPrices, listingsResponse]);
+
+	useEffect(() => {
+		if (tableData) {
+			setLoading(false);
+		}
+	}, [tableData]);
 
 	useInterval(() => {
 		setResetTimer(!resetTimer);
@@ -69,15 +74,17 @@ export default function FlippingComp() {
 					resetTimer={resetTimer}
 					updateTime={getDifferenceString(updateTime)}
 				/>
-				{tableData.map((itemElement) => {
-					return (
-						<FlippingItem
-							inputItem={itemElement}
-							key={itemElement.itemName}
-							inputData={boxPlotData[itemElement.itemId]}
-						/>
-					);
-				})}
+				<div className="dataHolder">
+					{tableData.map((itemElement) => {
+						return (
+							<FlippingItem
+								inputItem={itemElement}
+								key={itemElement.itemName}
+								inputData={boxPlotData[itemElement.itemId]}
+							/>
+						);
+					})}
+				</div>
 			</Paper>
 		);
 	} else {
