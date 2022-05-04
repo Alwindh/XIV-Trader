@@ -42,7 +42,7 @@
     transform: scaleY(0);
     max-height: 0px;
   }
-    25% {
+    50% {
     transform-origin: top center;
     transform: scaleY(0);
     max-height: 0px;
