@@ -34,7 +34,7 @@
 
 
 .dataHolder {
-  animation: createBox 0.5s;
+  animation: createBox 1s;
 }
 @keyframes createBox {
   0% {
