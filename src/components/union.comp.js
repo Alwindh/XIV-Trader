@@ -24,7 +24,9 @@ export default function UnionComp() {
 	return (
 		<Paper style={{ marginBottom: "1em" }}>
 			<ComponentTopBar barName="Union" updateTime={getDifferenceString(new Date())} />
-			<BasicTable data={tableData} loading={loading} />
+			<div className="dataHolder">
+				<BasicTable data={tableData} loading={loading} />
+			</div>
 		</Paper>
 	);
 }
