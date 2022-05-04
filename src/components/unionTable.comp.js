@@ -118,22 +118,26 @@ export default function DataTable(props) {
 	const handleGetRowId = (e) => {
 		return e.itemId;
 	};
-	return (
-		props.data && (
-			<div style={{ width: "100%" }}>
-				{
-					<DataGrid
-						rows={props.data}
-						columns={columns}
-						getRowId={handleGetRowId}
-						autoHeight={true}
-						pageSize={10}
-						rowsPerPageOptions={[10]}
-						hideFooterSelectedRowCount={true}
-						loading={props.loading}
-					/>
-				}
-			</div>
-		)
-	);
+	if (props.data && !props.loading) {
+		return (
+			props.data && (
+				<div className="dataHolder" style={{ width: "100%" }}>
+					{
+						<DataGrid
+							rows={props.data}
+							columns={columns}
+							getRowId={handleGetRowId}
+							autoHeight={true}
+							pageSize={10}
+							rowsPerPageOptions={[10]}
+							hideFooterSelectedRowCount={true}
+							loading={false}
+						/>
+					}
+				</div>
+			)
+		);
+	} else {
+		return null;
+	}
 }
