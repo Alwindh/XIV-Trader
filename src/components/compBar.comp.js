@@ -16,7 +16,7 @@ export default function ComponentTopBar(props) {
 						</Typography>
 					</Grid>
 					<Grid item xs={7}>
-						<Typography>{"Last updated " + props.updateTime}</Typography>
+						{!props.loading ? <Typography>{"Last updated " + props.updateTime}</Typography> : ""}
 					</Grid>
 					<Grid item xs={1} style={{ textAlign: "right" }}>
 						{props.resetTimer !== undefined ? <TimerBubble resetTimer={props.resetTimer} /> : null}

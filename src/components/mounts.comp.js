@@ -116,6 +116,7 @@ export default function MountsComp(props) {
 			<ComponentTopBar
 				barName="Mounts - Loading..."
 				progress={progress}
+				loading={true}
 				updateTime={getDifferenceString(updateTime)}
 			/>
 		);

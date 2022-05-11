@@ -91,6 +91,7 @@ export default function FlippingComp() {
 		return (
 			<ComponentTopBar
 				barName="Flipping - Loading..."
+				loading={true}
 				progress={progress}
 				updateTime={getDifferenceString(updateTime)}
 			/>

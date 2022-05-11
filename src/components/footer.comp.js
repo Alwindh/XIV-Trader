@@ -1,19 +1,16 @@
 import React from "react";
-import Box from "@mui/material/Box";
-import AppBar from "@mui/material/AppBar";
 const loadData = require("../github.json");
 
-export default function FooterBar(props) {
-	console.log(loadData);
+export default function FooterBar() {
 	return (
-		<Box>
-			<AppBar
-				position="absolute"
-				color="transparent"
-				style={{ bottom: "0", top: "revert", alignItems: "center", backgroundColor: "rgba(0, 0, 0, 0.2)" }}
-			>
-				build {loadData.commit.slice(0, 7)}
-			</AppBar>
-		</Box>
+		<div
+			style={{
+				width: "100%",
+				flexShrink: "0",
+				backgroundColor: "rgba(0, 0, 0, 0.2)",
+			}}
+		>
+			build {loadData.commit.slice(0, 7)}
+		</div>
 	);
 }

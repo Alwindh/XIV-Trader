@@ -7,14 +7,15 @@ import Footer from "./components/footer.comp";
 
 function App() {
 	return (
-		<>
-			<Container style={{ marginTop: "1em" }}>
+		<div style={{ display: "flex", flexDirection: "column", height: "100vh" }}>
+			<Container style={{ paddingTop: "1em", flex: "1 0 auto" }}>
 				<FlippingComp />
 				<MountsComp />
 				<UnionComp />
+				<div style={{ height: "25px" }} />
 			</Container>
 			<Footer />
-		</>
+		</div>
 	);
 }
 
