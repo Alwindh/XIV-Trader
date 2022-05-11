@@ -66,6 +66,9 @@ export function combineFlippingData(mainList, responseObject, lowestTwinPrices) 
 	let returnArray = [];
 	mainList.forEach((itemElement) => {
 		let newElement = { itemName: itemElement.itemName, itemId: itemElement.itemId };
+		if (lowestTwinPrices[newElement.itemId] <= 100) {
+			return;
+		}
 		const responseItem = responseObject.items[newElement.itemId];
 		let lowerListings = [];
 		newElement["lowestTwinPrice"] = lowestTwinPrices[newElement.itemId];
@@ -104,6 +107,9 @@ export function combineFlippingData(mainList, responseObject, lowestTwinPrices) 
 
 	mainList.forEach((itemElement) => {
 		let newElement = { itemName: itemElement.itemName + " HQ", itemId: itemElement.itemId };
+		if (lowestTwinPrices[newElement.itemId] <= 100) {
+			return;
+		}
 		const responseItem = responseObject.items[newElement.itemId];
 		let lowerListings = [];
 		newElement["lowestTwinPrice"] = lowestTwinPrices[newElement.itemId + "_HQ"];

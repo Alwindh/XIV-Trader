@@ -7,10 +7,9 @@ import { getItemIds, combineFlippingData, getDifferenceString, getLowPrices } fr
 import ComponentTopBar from "./compBar.comp";
 import FlippingItem from "./flippingItem.comp";
 
-const loadData = require("../data/flipping.data.json");
-const itemIds = getItemIds(loadData);
-
 export default function FlippingComp() {
+	const [itemIds, setItemIds] = useState();
+	const [loadData, setLoadData] = useState();
 	const [tableData, setTableData] = useState();
 	const [historyPrices, sethistoryPrices] = useState();
 	const [listingsResponse, setListingsResponse] = useState();
@@ -23,31 +22,41 @@ export default function FlippingComp() {
 	useEffect(() => {
 		setLoading(true);
 		setProgress(0);
-		Axios.get(
-			"https://universalis.app/api/history/33/" +
-				itemIds +
-				"?entries=999999&statsWithin=2678400&entriesWithin=2678400"
-		).then((response) => {
-			const lowPrices = getLowPrices(response.data);
-			let candleStickArray = {};
-			response.data.items.forEach((itemListing) => {
-				candleStickArray[itemListing.itemID] = itemListing;
-			});
-			setboxPlotData(candleStickArray);
-			sethistoryPrices(lowPrices);
-		});
-		Axios.get("https://universalis.app/api/v2/light/" + itemIds).then((response) => {
-			setListingsResponse(response.data);
+		Axios.get("/api/data/get/top").then((response) => {
+			setLoadData(response.data);
+			const itemIds = getItemIds(response.data);
+			setItemIds(itemIds);
 		});
 	}, []);
 
 	useEffect(() => {
-		if (historyPrices && listingsResponse) {
+		if (itemIds) {
+			Axios.get(
+				"https://universalis.app/api/history/33/" +
+					itemIds +
+					"?entries=999999&statsWithin=2678400&entriesWithin=2678400"
+			).then((response) => {
+				const lowPrices = getLowPrices(response.data);
+				let candleStickArray = {};
+				response.data.items.forEach((itemListing) => {
+					candleStickArray[itemListing.itemID] = itemListing;
+				});
+				setboxPlotData(candleStickArray);
+				sethistoryPrices(lowPrices);
+			});
+			Axios.get("https://universalis.app/api/v2/light/" + itemIds).then((response) => {
+				setListingsResponse(response.data);
+			});
+		}
+	}, [itemIds]);
+
+	useEffect(() => {
+		if (historyPrices && listingsResponse && loadData) {
 			let flippingData = combineFlippingData(loadData, listingsResponse, historyPrices);
 			setTableData(flippingData);
 			setUpdateTime(new Date());
 		}
-	}, [historyPrices, listingsResponse]);
+	}, [historyPrices, listingsResponse, loadData]);
 
 	useEffect(() => {
 		if (tableData) {
