@@ -94,7 +94,9 @@ function iterateFlippingData(mainList, lowestTwinPrices, responseObject, hqFilte
 		let timeSinceUpdate = null;
 
 		lowerListings.forEach((listingElement) => {
-			if (listingElement.pricePerUnit <= underCutValue) {
+			let relevantPriced = listingElement.pricePerUnit <= underCutValue;
+			let hqCheck = hqFilter ? listingElement.hq : true;
+			if (relevantPriced && hqCheck) {
 				listingElement["timeString"] = getDifferenceString(listingElement.lastReviewTime * 1000);
 				if (timeSinceUpdate === null || timeSinceUpdate < listingElement.lastReviewTime * 1000) {
 					timeSinceUpdate = listingElement.lastReviewTime * 1000;
