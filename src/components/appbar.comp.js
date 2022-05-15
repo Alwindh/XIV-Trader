@@ -1,4 +1,4 @@
-import * as React from 'react';
+import {useState, useEffect} from 'react';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
@@ -13,13 +13,17 @@ import BasicSelect from './selector.comp';
 
 
 export default function MenuAppBar() {
-  const [auth, setAuth] = React.useState(true);
-  const [anchorEl, setAnchorEl] = React.useState(null);
-  const [dataCenter, setDataCenter] =  React.useState(null)
+  const [anchorEl, setAnchorEl] = useState(null);
+  const [dataCenter, setDataCenter] =  useState("")
+  const [dataCenterOptions] = useState([{optionName:'Light',optionValue: 33},{optionName: 'Dark', optionValue : 34}])
   
+  useEffect(()=>{
+    console.log(dataCenter)
+  },[dataCenter])
 
-  const handleChange = (event) => {
-    setAuth(event.target.checked);
+  const handleDataChange = (event) => {
+    console.log(event.target)
+    setDataCenter(event.target.value);
   };
 
   const handleMenu = (event) => {
@@ -43,8 +47,8 @@ export default function MenuAppBar() {
           >
             <HomeIcon />
           </IconButton>
-          <BasicSelect name={'Datacenter'} />
-          {auth && (
+          <BasicSelect options = {dataCenterOptions} value = {dataCenter} handleChange={handleDataChange} name={'Datacenter'} />
+          
             <div>
               <IconButton
                 size="large"
@@ -75,7 +79,7 @@ export default function MenuAppBar() {
                 <MenuItem onClick={handleClose}>My account</MenuItem>
               </Menu>
             </div>
-          )}
+          
         </Toolbar>
       </AppBar>
     </Box>
