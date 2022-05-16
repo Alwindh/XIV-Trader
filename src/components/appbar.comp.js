@@ -1,87 +1,120 @@
-import {useState, useEffect} from 'react';
-import AppBar from '@mui/material/AppBar';
-import Box from '@mui/material/Box';
-import Toolbar from '@mui/material/Toolbar';
-import Typography from '@mui/material/Typography';
-import IconButton from '@mui/material/IconButton';
-import MenuIcon from '@mui/icons-material/Menu';
-import AccountCircle from '@mui/icons-material/AccountCircle';
-import HomeIcon from '@mui/icons-material/Home';
-import MenuItem from '@mui/material/MenuItem';
-import Menu from '@mui/material/Menu';
-import BasicSelect from './selector.comp';
+import { useState, useEffect } from "react";
+import AppBar from "@mui/material/AppBar";
+import Box from "@mui/material/Box";
+import Toolbar from "@mui/material/Toolbar";
+import IconButton from "@mui/material/IconButton";
+// import AccountCircle from "@mui/icons-material/AccountCircle";
+import SettingsIcon from "@mui/icons-material/Settings";
+// import MenuItem from "@mui/material/MenuItem";
+import Backdrop from "@mui/material/Backdrop";
+// import Menu from "@mui/material/Menu";
+import SettingsCard from "./settings.comp";
+import { CheckSettings } from "../helpers/cookies.helper";
+import { Typography } from "@mui/material";
 
+const serverData = require("../data/servers.data.json");
+
+function getServerName(serverNumber, dataCenter) {
+	let returnString = "";
+	serverData[dataCenter].forEach((server) => {
+		// console.log(`is ${serverNumber} === ${server.optionValue}`);
+		// console.log(parseInt(server.optionValue) === parseInt(serverNumber));
+		if (parseInt(server.optionValue) === parseInt(serverNumber)) {
+			returnString = server.optionName;
+		}
+	});
+	return returnString;
+}
 
 export default function MenuAppBar() {
-  const [anchorEl, setAnchorEl] = useState(null);
-  const [dataCenter, setDataCenter] =  useState("")
-  const [dataCenterOptions] = useState([{optionName:'Light',optionValue: 33},{optionName: 'Dark', optionValue : 34}])
-  
-  useEffect(()=>{
-    console.log(dataCenter)
-  },[dataCenter])
+	// const [anchorEl, setAnchorEl] = useState(null);
+	const [cookies, setCookies] = useState(null);
+	const [cookiesValid, setCookiesValid] = useState(false);
+	const [settingsButton, setSettingsButton] = useState(false);
+	const [dataCenter, setDataCenter] = useState();
+	const [serverName, setServerName] = useState();
 
-  const handleDataChange = (event) => {
-    console.log(event.target)
-    setDataCenter(event.target.value);
-  };
+	useEffect(() => {
+		setCookies(CheckSettings());
+	}, []);
 
-  const handleMenu = (event) => {
-    setAnchorEl(event.currentTarget);
-  };
+	useEffect(() => {
+		console.log(serverName);
+	}, [serverName]);
 
-  const handleClose = () => {
-    setAnchorEl(null);
-  };
+	useEffect(() => {
+		if (cookies) {
+			setDataCenter(cookies.dataCenter);
+			setServerName(getServerName(cookies.server, cookies.dataCenter));
+			let allValid = Object.keys(cookies).every((element) => {
+				return cookies[element] !== false;
+			});
+			setCookiesValid(allValid);
+		}
+	}, [cookies]);
 
-  return (
-    <Box sx={{ flexGrow: 1 }}>
-      <AppBar position="static">
-        <Toolbar>
-          <IconButton
-            size="large"
-            edge="start"
-            color="inherit"
-            aria-label="home"
-            sx={{ mr: 2 }}
-          >
-            <HomeIcon />
-          </IconButton>
-          <BasicSelect options = {dataCenterOptions} value = {dataCenter} handleChange={handleDataChange} name={'Datacenter'} />
-          
-            <div>
-              <IconButton
-                size="large"
-                aria-label="account of current user"
-                aria-controls="menu-appbar"
-                aria-haspopup="true"
-                onClick={handleMenu}
-                color="inherit"
-              >
-                <AccountCircle />
-              </IconButton>
-              <Menu
-                id="menu-appbar"
-                anchorEl={anchorEl}
-                anchorOrigin={{
-                  vertical: 'top',
-                  horizontal: 'right',
-                }}
-                keepMounted
-                transformOrigin={{
-                  vertical: 'top',
-                  horizontal: 'right',
-                }}
-                open={Boolean(anchorEl)}
-                onClose={handleClose}
-              >
-                <MenuItem onClick={handleClose}>Profile</MenuItem>
-                <MenuItem onClick={handleClose}>My account</MenuItem>
-              </Menu>
-            </div>
-          
-        </Toolbar>
-      </AppBar>
-    </Box>
-  );
+	// const handleMenu = (event) => {
+	// 	setAnchorEl(event.currentTarget);
+	// };
+
+	// const handleClose = () => {
+	// 	setAnchorEl(null);
+	// };
+
+	return (
+		<Box style={{ flexGrow: "0" }} sx={{ height: "64px", maxHeight: "64px" }}>
+			<AppBar position="static">
+				<Toolbar>
+					<IconButton size="large" edge="start" color="inherit" aria-label="home" sx={{ mr: 2 }}>
+						<SettingsIcon
+							onClick={() => {
+								setSettingsButton(true);
+							}}
+						/>
+					</IconButton>
+					{/* <div> */}
+					{/* <IconButton
+							size="large"
+							aria-label="account of current user"
+							aria-controls="menu-appbar"
+							aria-haspopup="true"
+							onClick={handleMenu}
+							color="inherit"
+						>
+							<AccountCircle />
+						</IconButton> */}
+					{/* <Menu
+							id="menu-appbar"
+							anchorEl={anchorEl}
+							anchorOrigin={{
+								vertical: "top",
+								horizontal: "right",
+							}}
+							keepMounted
+							transformOrigin={{
+								vertical: "top",
+								horizontal: "right",
+							}}
+							open={Boolean(anchorEl)}
+							onClose={handleClose}
+						>
+							<MenuItem onClick={handleClose}>Profile</MenuItem>
+							<MenuItem onClick={handleClose}>My account</MenuItem>
+						</Menu> */}
+					{/* </div> */}
+					<Typography style={{ paddingRight: "1em" }}>{dataCenter ? dataCenter : ""}</Typography>
+					<Typography>{serverName ? serverName : ""}</Typography>
+				</Toolbar>
+			</AppBar>
+			<Backdrop
+				sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
+				open={!cookiesValid || settingsButton}
+				onClick={() => {
+					setSettingsButton(false);
+				}}
+			>
+				<SettingsCard />
+			</Backdrop>
+		</Box>
+	);
 }

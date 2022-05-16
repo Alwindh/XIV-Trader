@@ -7,10 +7,13 @@ import { getItemIds, combineFlippingData, getDifferenceString, getLowPrices } fr
 import ComponentTopBar from "./compBar.comp";
 import FlippingItem from "./flippingItem.comp";
 
+import { CheckSettings } from "../helpers/cookies.helper";
+
 export default function FlippingComp() {
 	const [itemIds, setItemIds] = useState();
 	const [loadData, setLoadData] = useState();
 	const [tableData, setTableData] = useState();
+	const [historyResponse, setHistoryResponse] = useState();
 	const [historyPrices, sethistoryPrices] = useState();
 	const [listingsResponse, setListingsResponse] = useState();
 	const [loading, setLoading] = useState(true);
@@ -18,10 +21,14 @@ export default function FlippingComp() {
 	const [progress, setProgress] = useState(0);
 	const [resetTimer, setResetTimer] = useState(true);
 	const [boxPlotData, setboxPlotData] = useState({});
+	const [dataCenter, setDataCenter] = useState();
+	const [server, setServer] = useState();
+	const [cookies, setCookies] = useState();
 
 	useEffect(() => {
 		setLoading(true);
 		setProgress(0);
+		setCookies(CheckSettings());
 		Axios.get("/api/data/get/top").then((response) => {
 			setLoadData(response.data);
 			const itemIds = getItemIds(response.data);
@@ -30,25 +37,45 @@ export default function FlippingComp() {
 	}, []);
 
 	useEffect(() => {
-		if (itemIds) {
+		if (cookies) {
+			setDataCenter(cookies.dataCenter);
+			setServer(cookies.server);
+		}
+	}, [cookies]);
+
+	useEffect(() => {
+		if (server && dataCenter && itemIds) {
 			Axios.get(
-				"https://universalis.app/api/history/33/" +
+				"https://universalis.app/api/history/" +
+					server +
+					"/" +
 					itemIds +
 					"?entries=999999&statsWithin=2678400&entriesWithin=2678400"
 			).then((response) => {
-				const lowPrices = getLowPrices(response.data);
-				let candleStickArray = {};
-				response.data.items.forEach((itemListing) => {
-					candleStickArray[itemListing.itemID] = itemListing;
-				});
-				setboxPlotData(candleStickArray);
-				sethistoryPrices(lowPrices);
+				setHistoryResponse(response.data);
 			});
-			Axios.get("https://universalis.app/api/v2/light/" + itemIds).then((response) => {
+			Axios.get("https://universalis.app/api/v2/" + dataCenter + "/" + itemIds).then((response) => {
 				setListingsResponse(response.data);
 			});
 		}
+	}, [server, dataCenter, itemIds]);
+
+	useEffect(() => {
+		if (itemIds) {
+		}
 	}, [itemIds]);
+
+	useEffect(() => {
+		if (historyResponse) {
+			const lowPrices = getLowPrices(historyResponse);
+			sethistoryPrices(lowPrices);
+			let candleStickArray = {};
+			historyResponse.items.forEach((itemListing) => {
+				candleStickArray[itemListing.itemID] = itemListing;
+			});
+			setboxPlotData(candleStickArray);
+		}
+	}, [historyResponse]);
 
 	useEffect(() => {
 		if (historyPrices && listingsResponse && loadData) {
@@ -65,8 +92,9 @@ export default function FlippingComp() {
 	}, [tableData]);
 
 	useInterval(() => {
+		// this needs major overhaul
 		setResetTimer(!resetTimer);
-		Axios.get("https://universalis.app/api/v2/light/" + itemIds).then((response) => {
+		Axios.get("https://universalis.app/api/v2/" + dataCenter + "/" + itemIds).then((response) => {
 			if (JSON.stringify(response.data) !== JSON.stringify(listingsResponse)) {
 				setUpdateTime(new Date());
 				setListingsResponse(response.data);
