@@ -120,9 +120,7 @@ function iterateFlippingData(mainList, lowestTwinPrices, responseObject, hqFilte
 
 export function combineFlippingData(mainList, responseObject, lowestTwinPrices, cutOffPrice) {
 	const nqList = iterateFlippingData(mainList, lowestTwinPrices, responseObject, false, cutOffPrice);
-	console.log("nq logs parsed");
 	const hqList = iterateFlippingData(mainList, lowestTwinPrices, responseObject, true, cutOffPrice);
-	console.log("hq logs parsed");
 	const returnArray = nqList.concat(hqList);
 
 	let finalArray = [];
@@ -131,7 +129,6 @@ export function combineFlippingData(mainList, responseObject, lowestTwinPrices, 
 			finalArray.push(element);
 		}
 	});
-	console.log("done parsing all data");
 	return finalArray;
 }
 

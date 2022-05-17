@@ -14,8 +14,6 @@ const serverData = require("../data/servers.data.json");
 function getServerName(serverNumber, dataCenter) {
 	let returnString = "";
 	serverData[dataCenter].forEach((server) => {
-		// console.log(`is ${serverNumber} === ${server.optionValue}`);
-		// console.log(parseInt(server.optionValue) === parseInt(serverNumber));
 		if (parseInt(server.optionValue) === parseInt(serverNumber)) {
 			returnString = server.optionName;
 		}
@@ -24,7 +22,6 @@ function getServerName(serverNumber, dataCenter) {
 }
 
 export default function MenuAppBar() {
-	// const [anchorEl, setAnchorEl] = useState(null);
 	const [cookies, setCookies] = useState(null);
 	const [cookiesValid, setCookiesValid] = useState(false);
 	const [settingsButton, setSettingsButton] = useState(false);
@@ -53,14 +50,6 @@ export default function MenuAppBar() {
 		}
 	}, [cookies]);
 
-	// const handleMenu = (event) => {
-	// 	setAnchorEl(event.currentTarget);
-	// };
-
-	// const handleClose = () => {
-	// 	setAnchorEl(null);
-	// };
-
 	return (
 		<Box style={{ flexGrow: "0" }} sx={{ height: "64px", maxHeight: "64px" }}>
 			<AppBar position="static">
@@ -77,36 +66,6 @@ export default function MenuAppBar() {
 					>
 						<SettingsIcon />
 					</IconButton>
-					{/* <div> */}
-					{/* <IconButton
-							size="large"
-							aria-label="account of current user"
-							aria-controls="menu-appbar"
-							aria-haspopup="true"
-							onClick={handleMenu}
-							color="inherit"
-						>
-							<AccountCircle />
-						</IconButton> */}
-					{/* <Menu
-							id="menu-appbar"
-							anchorEl={anchorEl}
-							anchorOrigin={{
-								vertical: "top",
-								horizontal: "right",
-							}}
-							keepMounted
-							transformOrigin={{
-								vertical: "top",
-								horizontal: "right",
-							}}
-							open={Boolean(anchorEl)}
-							onClose={handleClose}
-						>
-							<MenuItem onClick={handleClose}>Profile</MenuItem>
-							<MenuItem onClick={handleClose}>My account</MenuItem>
-						</Menu> */}
-					{/* </div> */}
 					<Typography style={{ paddingRight: "1em" }}>{dataCenter ? dataCenter : ""}</Typography>
 					<Typography>{serverName ? serverName : ""}</Typography>
 				</Toolbar>
