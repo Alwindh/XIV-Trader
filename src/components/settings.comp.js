@@ -41,15 +41,20 @@ export default function SettingsCard(props) {
 	useEffect(() => {
 		if (dataCenter !== "") {
 			setServerOptions(allServerOptions[dataCenter]);
+			setServer("");
 		}
-	}, [dataCenter, allServerOptions]);
+	}, [dataCenter, allServerOptions, cookies]);
 
 	useEffect(() => {
 		if (serverOptions) {
 			setAllowServerChoice(true);
 			setAllowDataCenterChoice(true);
 			if (cookies) {
-				setServer(cookies.server);
+				serverOptions.forEach((serverOption) => {
+					if (parseInt(serverOption.optionValue) === parseInt(cookies.server)) {
+						setServer(cookies.server);
+					}
+				});
 			}
 		}
 	}, [serverOptions, cookies]);
@@ -82,7 +87,7 @@ export default function SettingsCard(props) {
 
 	return (
 		<Box
-			sx={{ minWidth: 275 }}
+			sx={{ minWidth: 300 }}
 			style={{ position: "absolute", top: "50%", left: "50%", transform: "translate(-50%, -50%)" }}
 			onClick={props.handleClick}
 		>

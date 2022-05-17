@@ -4,7 +4,7 @@ import Box from "@mui/material/Box";
 import Toolbar from "@mui/material/Toolbar";
 import IconButton from "@mui/material/IconButton";
 import SettingsIcon from "@mui/icons-material/Settings";
-import Backdrop from "@mui/material/Backdrop";
+import Modal from "@mui/material/Modal";
 import SettingsCard from "./settings.comp";
 import { CheckSettings } from "../helpers/cookies.helper";
 import { Typography } from "@mui/material";
@@ -111,13 +111,13 @@ export default function MenuAppBar() {
 					<Typography>{serverName ? serverName : ""}</Typography>
 				</Toolbar>
 			</AppBar>
-			<Backdrop
+			<Modal
 				sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
 				open={!cookiesValid || settingsButton}
-				onClick={handleCloseClick}
+				onClose={handleCloseClick}
 			>
 				<SettingsCard sx={{ zIndex: (theme) => theme.zIndex.drawer + 2000 }} handleClick={handleCardClick} />
-			</Backdrop>
+			</Modal>
 		</Box>
 	);
 }
