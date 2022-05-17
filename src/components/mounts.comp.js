@@ -11,6 +11,7 @@ import Paper from "@mui/material/Paper";
 import { useInterval } from "../helpers/interval.helper";
 import ComponentTopBar from "./compBar.comp";
 import { getItemIds, combineMountsData, getDifferenceString } from "../helpers/dataTools.helper";
+import { CheckSettings } from "../helpers/cookies.helper";
 
 const loadData = require("../data/mounts.data.json");
 const itemIds = getItemIds(loadData);
@@ -21,21 +22,35 @@ export default function MountsComp(props) {
 	const [updateTime, setUpdateTime] = useState();
 	const [progress, setProgress] = useState(0);
 	const [resetTimer, setResetTimer] = useState(true);
+	const [cookies, setCookies] = useState();
+	const [dataCenter, setDataCenter] = useState();
 
 	useEffect(() => {
 		setProgress(0);
 		setLoading(true);
-		Axios.get("https://universalis.app/api/v2/light/" + itemIds).then((response) => {
-			let mountsData = combineMountsData(loadData, response.data);
-			setTableData(mountsData);
-			setUpdateTime(new Date());
-			setLoading(false);
-		});
+		setCookies(CheckSettings());
 	}, []);
+
+	useEffect(() => {
+		if (cookies) {
+			setDataCenter(cookies.dataCenter);
+		}
+	}, [cookies]);
+
+	useEffect(() => {
+		if (dataCenter) {
+			Axios.get("https://universalis.app/api/v2/" + dataCenter + "/" + itemIds).then((response) => {
+				let mountsData = combineMountsData(loadData, response.data);
+				setTableData(mountsData);
+				setUpdateTime(new Date());
+				setLoading(false);
+			});
+		}
+	}, [dataCenter]);
 
 	useInterval(() => {
 		setResetTimer(!resetTimer);
-		Axios.get("https://universalis.app/api/v2/light/" + itemIds).then((response) => {
+		Axios.get("https://universalis.app/api/v2/" + dataCenter + "/" + itemIds).then((response) => {
 			let mountsData = combineMountsData(loadData, response.data);
 			if (JSON.stringify(mountsData) !== JSON.stringify(tableData)) {
 				setUpdateTime(new Date());
@@ -44,21 +59,6 @@ export default function MountsComp(props) {
 			setProgress(0);
 		});
 	}, 60000);
-
-	// useEffect(() => {
-	// 	const timer = setInterval(() => {
-	// 		setProgress((prevProgress) => {
-	// 			if (prevProgress >= 100) {
-	// 				return 0;
-	// 			} else {
-	// 				return prevProgress + 10 / 6;
-	// 			}
-	// 		});
-	// 	}, 1000);
-	// 	return () => {
-	// 		clearInterval(timer);
-	// 	};
-	// }, [loading]);
 
 	if (!loading) {
 		return (

@@ -1,13 +1,12 @@
 .App {
   text-align: center;
 }
+
 html, body{
     min-height: 100vh;
     margin: 0px;
     padding:0px;
 }
-
-
 
 .App-header {
   background-color: #282c34;
@@ -24,23 +23,18 @@ html, body{
   color: #61dafb;
 }
 
-
-
-
 .MuiAccordionSummary-root{
       background-color: #fafafa!important;
-
 }
 
 .MuiAccordion-region{
-    
     box-shadow:         inset 0 8px 6px -6px #7c7c7c;
 }
 
-
 .dataHolder {
-  animation: createBox 1s;
+  /* animation: createBox 1s; */
 }
+
 @keyframes createBox {
   0% {
     transform-origin: top center;

@@ -33,7 +33,6 @@ export function combineUnionData(mainList, responseObject) {
 	});
 	const parameterList = ["itemVelocity", "stDev", "itemValue", "numListings"];
 	const minMax = findMinMax(newList, parameterList);
-
 	newList.forEach((itemElement) => {
 		itemElement["ScoreValues"] = 0;
 		parameterList.forEach((parameterElement) => {
@@ -62,7 +61,7 @@ export function combineUnionData(mainList, responseObject) {
 	return newList;
 }
 
-function iterateFlippingData(mainList, lowestTwinPrices, responseObject, hqFilter, cutOffPrice = 100) {
+function iterateFlippingData(mainList, lowestTwinPrices, responseObject, hqFilter, cutOffPrice) {
 	let returnArray = [];
 	mainList.forEach((itemElement) => {
 		let newElement = { itemId: itemElement.itemId };
@@ -119,9 +118,11 @@ function iterateFlippingData(mainList, lowestTwinPrices, responseObject, hqFilte
 	return returnArray;
 }
 
-export function combineFlippingData(mainList, responseObject, lowestTwinPrices) {
-	const nqList = iterateFlippingData(mainList, lowestTwinPrices, responseObject, false);
-	const hqList = iterateFlippingData(mainList, lowestTwinPrices, responseObject, true);
+export function combineFlippingData(mainList, responseObject, lowestTwinPrices, cutOffPrice) {
+	const nqList = iterateFlippingData(mainList, lowestTwinPrices, responseObject, false, cutOffPrice);
+	console.log("nq logs parsed");
+	const hqList = iterateFlippingData(mainList, lowestTwinPrices, responseObject, true, cutOffPrice);
+	console.log("hq logs parsed");
 	const returnArray = nqList.concat(hqList);
 
 	let finalArray = [];
@@ -130,7 +131,7 @@ export function combineFlippingData(mainList, responseObject, lowestTwinPrices) 
 			finalArray.push(element);
 		}
 	});
-
+	console.log("done parsing all data");
 	return finalArray;
 }
 

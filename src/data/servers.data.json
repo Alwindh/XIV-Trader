@@ -1,0 +1,93 @@
+{
+	"Aether": [
+		{ "optionName": "Adamantoise", "optionValue": 73 },
+		{ "optionName": "Cactuar", "optionValue": 79 },
+		{ "optionName": "Faerie", "optionValue": 54 },
+		{ "optionName": "Gilgamesh", "optionValue": 63 },
+		{ "optionName": "Jenova", "optionValue": 40 },
+		{ "optionName": "Midgardsormr", "optionValue": 65 },
+		{ "optionName": "Sargatanas", "optionValue": 99 },
+		{ "optionName": "Siren", "optionValue": 57 }
+	],
+	"Chaos": [
+		{ "optionName": "Cerberus", "optionValue": 80 },
+		{ "optionName": "Louisoix", "optionValue": 83 },
+		{ "optionName": "Moogle", "optionValue": 71 },
+		{ "optionName": "Omega", "optionValue": 39 },
+		{ "optionName": "Ragnarok", "optionValue": 97 },
+		{ "optionName": "Spriggan", "optionValue": 85 }
+	],
+	"Crystal": [
+		{ "optionName": "Balmung", "optionValue": 91 },
+		{ "optionName": "Brynhildr", "optionValue": 34 },
+		{ "optionName": "Coeurl", "optionValue": 74 },
+		{ "optionName": "Diabolos", "optionValue": 62 },
+		{ "optionName": "Goblin", "optionValue": 81 },
+		{ "optionName": "Malboro", "optionValue": 75 },
+		{ "optionName": "Mateus", "optionValue": 37 },
+		{ "optionName": "Zalera", "optionValue": 41 }
+	],
+	"Elemental": [
+		{ "optionName": "Aegis", "optionValue": 90 },
+		{ "optionName": "Atomos", "optionValue": 68 },
+		{ "optionName": "Carbuncle", "optionValue": 45 },
+		{ "optionName": "Garuda", "optionValue": 58 },
+		{ "optionName": "Gungnir", "optionValue": 94 },
+		{ "optionName": "Kujata", "optionValue": 49 },
+		{ "optionName": "Ramuh", "optionValue": 60 },
+		{ "optionName": "Tonberry", "optionValue": 72 },
+		{ "optionName": "Typhon", "optionValue": 50 },
+		{ "optionName": "Unicorn", "optionValue": 30 }
+	],
+	"Gaia": [
+		{ "optionName": "Alexander", "optionValue": 43 },
+		{ "optionName": "Bahamut", "optionValue": 69 },
+		{ "optionName": "Durandal", "optionValue": 92 },
+		{ "optionName": "Fenrir", "optionValue": 46 },
+		{ "optionName": "Ifrit", "optionValue": 59 },
+		{ "optionName": "Ridill", "optionValue": 98 },
+		{ "optionName": "Tiamat", "optionValue": 76 },
+		{ "optionName": "Ultima", "optionValue": 51 },
+		{ "optionName": "Valefor", "optionValue": 52 },
+		{ "optionName": "Yojimbo", "optionValue": 31 },
+		{ "optionName": "Zeromus", "optionValue": 32 }
+	],
+	"Light": [
+		{ "optionName": "Lich", "optionValue": 36 },
+		{ "optionName": "Odin", "optionValue": 66 },
+		{ "optionName": "Phoenix", "optionValue": 56 },
+		{ "optionName": "Shiva", "optionValue": 67 },
+		{ "optionName": "Zodiark", "optionValue": 42 },
+		{ "optionName": "Twintania", "optionValue": 33 }
+	],
+	"Mana": [
+		{ "optionName": "Anima", "optionValue": 44 },
+		{ "optionName": "Asura", "optionValue": 23 },
+		{ "optionName": "Belias", "optionValue": 24 },
+		{ "optionName": "Chocobo", "optionValue": 70 },
+		{ "optionName": "Hades", "optionValue": 47 },
+		{ "optionName": "Ixion", "optionValue": 48 },
+		{ "optionName": "Mandragora", "optionValue": 82 },
+		{ "optionName": "Masamune", "optionValue": 96 },
+		{ "optionName": "Pandaemonium", "optionValue": 28 },
+		{ "optionName": "Shinryu", "optionValue": 29 },
+		{ "optionName": "Titan", "optionValue": 61 }
+	],
+	"Materia": [
+		{ "optionName": "Bismarck", "optionValue": 22 },
+		{ "optionName": "Ravana", "optionValue": 21 },
+		{ "optionName": "Sephirot", "optionValue": 86 },
+		{ "optionName": "Sophia", "optionValue": 87 },
+		{ "optionName": "Zurvan", "optionValue": 88 }
+	],
+	"Primal": [
+		{ "optionName": "Behemoth", "optionValue": 78 },
+		{ "optionName": "Excalibur", "optionValue": 93 },
+		{ "optionName": "Exodus", "optionValue": 53 },
+		{ "optionName": "Famfrit", "optionValue": 35 },
+		{ "optionName": "Hyperion", "optionValue": 95 },
+		{ "optionName": "Lamia", "optionValue": 55 },
+		{ "optionName": "Leviathan", "optionValue": 64 },
+		{ "optionName": "Ultros", "optionValue": 77 }
+	]
+}
