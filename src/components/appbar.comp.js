@@ -3,11 +3,8 @@ import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
 import Toolbar from "@mui/material/Toolbar";
 import IconButton from "@mui/material/IconButton";
-// import AccountCircle from "@mui/icons-material/AccountCircle";
 import SettingsIcon from "@mui/icons-material/Settings";
-// import MenuItem from "@mui/material/MenuItem";
 import Backdrop from "@mui/material/Backdrop";
-// import Menu from "@mui/material/Menu";
 import SettingsCard from "./settings.comp";
 import { CheckSettings } from "../helpers/cookies.helper";
 import { Typography } from "@mui/material";
@@ -33,6 +30,15 @@ export default function MenuAppBar() {
 	const [settingsButton, setSettingsButton] = useState(false);
 	const [dataCenter, setDataCenter] = useState();
 	const [serverName, setServerName] = useState();
+
+	function handleCloseClick() {
+		setSettingsButton(false);
+		console.log("123");
+	}
+	function handleCardClick(e) {
+		e.stopPropagation();
+		console.log("asd");
+	}
 
 	useEffect(() => {
 		setCookies(CheckSettings());
@@ -68,6 +74,7 @@ export default function MenuAppBar() {
 					<IconButton size="large" edge="start" color="inherit" aria-label="home" sx={{ mr: 2 }}>
 						<SettingsIcon
 							onClick={() => {
+								console.log("ewq");
 								setSettingsButton(true);
 							}}
 						/>
@@ -109,11 +116,9 @@ export default function MenuAppBar() {
 			<Backdrop
 				sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
 				open={!cookiesValid || settingsButton}
-				onClick={() => {
-					setSettingsButton(false);
-				}}
+				onClick={handleCloseClick}
 			>
-				<SettingsCard />
+				<SettingsCard sx={{ zIndex: (theme) => theme.zIndex.drawer + 2000 }} handleClick={handleCardClick} />
 			</Backdrop>
 		</Box>
 	);

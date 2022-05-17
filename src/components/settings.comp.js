@@ -21,7 +21,7 @@ function getDataCenterOptions() {
 	return dataCenterOptions;
 }
 
-export default function SettingsCard() {
+export default function SettingsCard(props) {
 	const [dataCenter, setDataCenter] = useState("");
 	const [dataCenterOptions] = useState(getDataCenterOptions());
 	const [server, setServer] = useState("");
@@ -78,7 +78,11 @@ export default function SettingsCard() {
 	}
 
 	return (
-		<Box sx={{ minWidth: 275 }}>
+		<Box
+			sx={{ minWidth: 275 }}
+			style={{ position: "absolute", top: "50%", left: "50%", transform: "translate(-50%, -50%)" }}
+			onClick={props.handleClick}
+		>
 			<Card variant="outlined">
 				<CardContent>
 					<Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
