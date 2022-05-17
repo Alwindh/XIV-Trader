@@ -24,6 +24,7 @@ export default function FlippingComp() {
 	const [dataCenter, setDataCenter] = useState();
 	const [server, setServer] = useState();
 	const [cookies, setCookies] = useState();
+	const [cutOffPrice, setcutOffPrice] = useState();
 
 	useEffect(() => {
 		setLoading(true);
@@ -40,6 +41,7 @@ export default function FlippingComp() {
 		if (cookies) {
 			setDataCenter(cookies.dataCenter);
 			setServer(cookies.server);
+			setcutOffPrice(cookies.price);
 		}
 	}, [cookies]);
 
@@ -78,12 +80,12 @@ export default function FlippingComp() {
 	}, [historyResponse]);
 
 	useEffect(() => {
-		if (historyPrices && listingsResponse && loadData) {
-			let flippingData = combineFlippingData(loadData, listingsResponse, historyPrices);
+		if (historyPrices && listingsResponse && loadData && cutOffPrice) {
+			let flippingData = combineFlippingData(loadData, listingsResponse, historyPrices, cutOffPrice);
 			setTableData(flippingData);
 			setUpdateTime(new Date());
 		}
-	}, [historyPrices, listingsResponse, loadData]);
+	}, [historyPrices, listingsResponse, loadData, cutOffPrice]);
 
 	useEffect(() => {
 		if (tableData) {

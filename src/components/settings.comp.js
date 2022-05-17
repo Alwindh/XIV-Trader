@@ -7,6 +7,7 @@ import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import BasicSelect from "./selector.comp";
 import { CheckSettings, SetSettings } from "../helpers/cookies.helper";
+import PriceSlider from "./slider.comp";
 
 const serverData = require("../data/servers.data.json");
 
@@ -30,15 +31,12 @@ export default function SettingsCard(props) {
 	const [allowDataCenterChoice, setAllowDataCenterChoice] = useState(true);
 	const [allowServerChoice, setAllowServerChoice] = useState(false);
 	const [cookies, setCookies] = useState();
+	const [price, setPrice] = useState(100);
 
 	useEffect(() => {
 		let cookies = CheckSettings();
 		setCookies(cookies);
 	}, []);
-
-	useEffect(() => {
-		console.log(allowDataCenterChoice);
-	}, [allowDataCenterChoice]);
 
 	useEffect(() => {
 		if (dataCenter !== "") {
@@ -50,14 +48,16 @@ export default function SettingsCard(props) {
 		if (serverOptions) {
 			setAllowServerChoice(true);
 			setAllowDataCenterChoice(true);
+			if (cookies) {
+				setServer(cookies.server);
+			}
 		}
-	}, [serverOptions]);
+	}, [serverOptions, cookies]);
 
 	useEffect(() => {
 		if (cookies) {
-			Object.keys(cookies).every((element) => {
-				return cookies[element] !== false;
-			});
+			setDataCenter(cookies.dataCenter);
+			setPrice(parseInt(cookies.price));
 		}
 	}, [cookies]);
 
@@ -68,12 +68,15 @@ export default function SettingsCard(props) {
 
 	const handleServerChange = (event) => {
 		const data = event.target.value;
-		console.log(event);
 		setServer(data);
 	};
 
+	const handleSliderChange = (event, newValue) => {
+		setPrice(newValue);
+	};
+
 	function saveCookies() {
-		SetSettings({ datacenter: dataCenter, server: server });
+		SetSettings({ datacenter: dataCenter, server: server, price: price });
 		window.location.reload();
 	}
 
@@ -107,14 +110,12 @@ export default function SettingsCard(props) {
 						name={"Server"}
 						disabled={!allowServerChoice}
 					/>
-					{/* <Typography sx={{ mb: 1.5 }} color="text.secondary">
-						adjective
+
+					<Typography sx={{ mb: 1.5 }} color="text.secondary">
+						Price cutoff
 					</Typography>
-					<Typography variant="body2">
-						well meaning and kindly.
-						<br />
-						{'"a benevolent smile"'}
-					</Typography> */}
+					<PriceSlider onChange={handleSliderChange} price={price} />
+					<Typography variant="body2">Hide items cheaper than {price} gil</Typography>
 				</CardContent>
 				<CardActions>
 					<Button

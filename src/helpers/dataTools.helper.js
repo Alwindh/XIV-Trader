@@ -61,7 +61,7 @@ export function combineUnionData(mainList, responseObject) {
 	return newList;
 }
 
-function iterateFlippingData(mainList, lowestTwinPrices, responseObject, hqFilter, cutOffPrice = 100) {
+function iterateFlippingData(mainList, lowestTwinPrices, responseObject, hqFilter, cutOffPrice) {
 	let returnArray = [];
 	mainList.forEach((itemElement) => {
 		let newElement = { itemId: itemElement.itemId };
@@ -118,10 +118,10 @@ function iterateFlippingData(mainList, lowestTwinPrices, responseObject, hqFilte
 	return returnArray;
 }
 
-export function combineFlippingData(mainList, responseObject, lowestTwinPrices) {
-	const nqList = iterateFlippingData(mainList, lowestTwinPrices, responseObject, false);
+export function combineFlippingData(mainList, responseObject, lowestTwinPrices, cutOffPrice) {
+	const nqList = iterateFlippingData(mainList, lowestTwinPrices, responseObject, false, cutOffPrice);
 	console.log("nq logs parsed");
-	const hqList = iterateFlippingData(mainList, lowestTwinPrices, responseObject, true);
+	const hqList = iterateFlippingData(mainList, lowestTwinPrices, responseObject, true, cutOffPrice);
 	console.log("hq logs parsed");
 	const returnArray = nqList.concat(hqList);
 

@@ -33,20 +33,14 @@ export default function MenuAppBar() {
 
 	function handleCloseClick() {
 		setSettingsButton(false);
-		console.log("123");
 	}
 	function handleCardClick(e) {
 		e.stopPropagation();
-		console.log("asd");
 	}
 
 	useEffect(() => {
 		setCookies(CheckSettings());
 	}, []);
-
-	useEffect(() => {
-		console.log(serverName);
-	}, [serverName]);
 
 	useEffect(() => {
 		if (cookies) {
@@ -71,13 +65,17 @@ export default function MenuAppBar() {
 		<Box style={{ flexGrow: "0" }} sx={{ height: "64px", maxHeight: "64px" }}>
 			<AppBar position="static">
 				<Toolbar>
-					<IconButton size="large" edge="start" color="inherit" aria-label="home" sx={{ mr: 2 }}>
-						<SettingsIcon
-							onClick={() => {
-								console.log("ewq");
-								setSettingsButton(true);
-							}}
-						/>
+					<IconButton
+						onClick={() => {
+							setSettingsButton(true);
+						}}
+						size="large"
+						edge="start"
+						color="inherit"
+						aria-label="home"
+						sx={{ mr: 2 }}
+					>
+						<SettingsIcon />
 					</IconButton>
 					{/* <div> */}
 					{/* <IconButton
