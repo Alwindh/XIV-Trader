@@ -5,7 +5,7 @@ import Typography from "@mui/material/Typography";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
-import CandleStick from "./candleStick.comp";
+import BoxPlotChart from "./boxPlot.comp";
 
 export default function FlippingItem(props) {
 	return (
@@ -20,7 +20,7 @@ export default function FlippingItem(props) {
 				</Typography>
 			</AccordionSummary>
 			<AccordionDetails>
-				<CandleStick inputData={props.inputData} />
+				<BoxPlotChart inputData={props.inputData} />
 
 				<Box sx={{ width: "100%", marginBottom: "1em" }}>
 					<a href={`https://universalis.app/market/${props.inputItem.itemId}`} target="blank">
