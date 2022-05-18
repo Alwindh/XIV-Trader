@@ -71,11 +71,11 @@ export default function FlippingComp() {
 		if (historyResponse) {
 			const lowPrices = getLowPrices(historyResponse);
 			sethistoryPrices(lowPrices);
-			let candleStickArray = {};
+			let boxPlotArray = {};
 			historyResponse.items.forEach((itemListing) => {
-				candleStickArray[itemListing.itemID] = itemListing;
+				boxPlotArray[itemListing.itemID] = itemListing;
 			});
-			setboxPlotData(candleStickArray);
+			setboxPlotData(boxPlotArray);
 		}
 	}, [historyResponse]);
 
