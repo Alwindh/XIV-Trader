@@ -35,12 +35,15 @@ export default function UnionComp() {
 	useEffect(() => {
 		setCookies(CheckSettings());
 	}, []);
+	if (!cookies) {
+		return "";
+	} else {
+		return (
+			<Paper style={{ marginBottom: "1em" }}>
+				<ComponentTopBar barName="Union" loading={loading} updateTime={getDifferenceString(new Date())} />
 
-	return (
-		<Paper style={{ marginBottom: "1em" }}>
-			<ComponentTopBar barName="Union" loading={loading} updateTime={getDifferenceString(new Date())} />
-
-			<BasicTable data={tableData} loading={loading} />
-		</Paper>
-	);
+				<BasicTable data={tableData} loading={loading} />
+			</Paper>
+		);
+	}
 }
