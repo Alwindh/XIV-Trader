@@ -9,11 +9,14 @@ export default function UnionComp(props) {
 		chart: {
 			type: "boxPlot",
 			height: 350,
+			toolbar: {
+				show: false,
+			},
+			zoom: {
+				enabled: false,
+			},
 		},
-		title: {
-			text: "price chart",
-			align: "left",
-		},
+
 		xaxis: {
 			type: "datetime",
 		},
