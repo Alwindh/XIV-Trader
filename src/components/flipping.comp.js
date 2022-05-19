@@ -53,19 +53,18 @@ export default function FlippingComp() {
 					"/" +
 					itemIds +
 					"?entries=999999&statsWithin=2678400&entriesWithin=2678400"
-			).then((response) => {
-				setHistoryResponse(response.data);
-			});
+			)
+				.then((response) => {
+					setHistoryResponse(response.data);
+				})
+				.catch((error) => {
+					console.log(error);
+				});
 			Axios.get("https://universalis.app/api/v2/" + dataCenter + "/" + itemIds).then((response) => {
 				setListingsResponse(response.data);
 			});
 		}
 	}, [server, dataCenter, itemIds]);
-
-	useEffect(() => {
-		if (itemIds) {
-		}
-	}, [itemIds]);
 
 	useEffect(() => {
 		if (historyResponse) {
