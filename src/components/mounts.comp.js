@@ -60,7 +60,9 @@ export default function MountsComp(props) {
 		});
 	}, 60000);
 
-	if (!loading) {
+	if (!cookies) {
+		return "";
+	} else if (!loading) {
 		return (
 			<Paper style={{ marginBottom: "1em" }}>
 				<ComponentTopBar

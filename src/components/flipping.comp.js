@@ -104,7 +104,9 @@ export default function FlippingComp() {
 		});
 	}, 60000);
 
-	if (!loading) {
+	if (!cookies) {
+		return "";
+	} else if (!loading) {
 		return (
 			<Paper style={{ marginBottom: "1em" }}>
 				<ComponentTopBar
