@@ -1,3 +1,4 @@
+import { Link } from "@mui/material";
 import React from "react";
 const loadData = require("../github.json");
 
@@ -13,6 +14,14 @@ export default function FooterBar() {
 			}}
 		>
 			build {loadData.commit.slice(0, 7)}
+			<Link
+				color="inherit"
+				underline="hover"
+				style={{ marginLeft: "1em" }}
+				href="https://github.com/Alwindh/XIV-Trader"
+			>
+				contribute
+			</Link>
 		</div>
 	);
 }
