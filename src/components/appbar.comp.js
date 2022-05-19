@@ -8,6 +8,7 @@ import Modal from "@mui/material/Modal";
 import SettingsCard from "./settings.comp";
 import { CheckSettings } from "../helpers/cookies.helper";
 import { Typography } from "@mui/material";
+import CurrencyExchangeIcon from "@mui/icons-material/CurrencyExchange";
 
 const serverData = require("../data/servers.data.json");
 
@@ -27,6 +28,7 @@ export default function MenuAppBar() {
 	const [settingsButton, setSettingsButton] = useState(false);
 	const [dataCenter, setDataCenter] = useState();
 	const [serverName, setServerName] = useState();
+	const [cutoffPrice, setCutoffPrice] = useState();
 
 	function handleCloseClick() {
 		setSettingsButton(false);
@@ -43,6 +45,7 @@ export default function MenuAppBar() {
 		if (cookies) {
 			setDataCenter(cookies.dataCenter);
 			setServerName(getServerName(cookies.server, cookies.dataCenter));
+			setCutoffPrice(cookies.price);
 			let allValid = Object.keys(cookies).every((element) => {
 				return cookies[element] !== false;
 			});
@@ -53,21 +56,31 @@ export default function MenuAppBar() {
 	return (
 		<Box style={{ flexGrow: "0" }} sx={{ height: "64px", maxHeight: "64px" }}>
 			<AppBar position="static">
-				<Toolbar>
-					<IconButton
-						onClick={() => {
-							setSettingsButton(true);
-						}}
-						size="large"
-						edge="start"
-						color="inherit"
-						aria-label="home"
-						sx={{ mr: 2 }}
-					>
-						<SettingsIcon />
-					</IconButton>
-					<Typography style={{ paddingRight: "1em" }}>{dataCenter ? dataCenter : ""}</Typography>
-					<Typography>{serverName ? serverName : ""}</Typography>
+				<Toolbar style={{ display: "flex", justifyContent: "space-between" }}>
+					<Toolbar>
+						<CurrencyExchangeIcon />
+						<Typography variant="h5" style={{ paddingLeft: "2em" }}>
+							XIV Trader
+						</Typography>
+					</Toolbar>
+					<Toolbar>
+						<Typography style={{ paddingRight: "2em" }}>{dataCenter ? dataCenter : ""}</Typography>
+						<Typography style={{ paddingRight: "2em" }}>{serverName ? serverName : ""}</Typography>
+						<Typography style={{ paddingRight: "2em" }}>
+							{cutoffPrice ? "> " + cutoffPrice + " gil" : ""}
+						</Typography>
+						<IconButton
+							onClick={() => {
+								setSettingsButton(true);
+							}}
+							size="large"
+							edge="start"
+							color="inherit"
+							aria-label="home"
+						>
+							<SettingsIcon />
+						</IconButton>
+					</Toolbar>
 				</Toolbar>
 			</AppBar>
 			<Modal
