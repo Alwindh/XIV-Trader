@@ -39,7 +39,7 @@ export default function UnionComp() {
 		return "";
 	} else {
 		return (
-			<Paper style={{ marginBottom: "1em" }}>
+			<Paper style={{ marginTop: "1em" }}>
 				<ComponentTopBar barName="Union" loading={loading} updateTime={getDifferenceString(new Date())} />
 
 				<BasicTable data={tableData} loading={loading} />

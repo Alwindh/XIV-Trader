@@ -7,12 +7,12 @@ import TimerBubble from "./timerBubble.comp";
 
 export default function ComponentTopBar(props) {
 	return (
-		<Box>
+		<Box className="componentTopBar">
 			<AppBar position="static" style={{ paddingTop: "1em", paddingBottom: "1em" }}>
 				<Grid container spacing={2}>
 					<Grid item xs={4}>
 						<Typography style={{ marginLeft: "1em", fontSize: "1.2em", fontWeight: "bold" }}>
-							{props.barName}
+							{props.loading ? `Loading ${props.barName}...` : props.barName}
 						</Typography>
 					</Grid>
 					<Grid item xs={7}>

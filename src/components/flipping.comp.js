@@ -106,35 +106,30 @@ export default function FlippingComp() {
 
 	if (!cookies) {
 		return "";
-	} else if (!loading) {
-		return (
-			<Paper style={{ marginBottom: "1em" }}>
-				<ComponentTopBar
-					barName="Flipping"
-					resetTimer={resetTimer}
-					updateTime={getDifferenceString(updateTime)}
-				/>
-				<div className="dataHolder">
-					{tableData.map((itemElement) => {
-						return (
-							<FlippingItem
-								inputItem={itemElement}
-								key={itemElement.itemName}
-								inputData={boxPlotData[itemElement.itemId]}
-							/>
-						);
-					})}
-				</div>
-			</Paper>
-		);
 	} else {
 		return (
-			<ComponentTopBar
-				barName="Flipping - Loading..."
-				loading={true}
-				progress={progress}
-				updateTime={getDifferenceString(updateTime)}
-			/>
+			<Paper style={{ marginTop: "1em" }}>
+				<ComponentTopBar
+					barName="Items"
+					resetTimer={resetTimer}
+					updateTime={getDifferenceString(updateTime)}
+					loading={loading}
+				/>
+
+				{!loading && (
+					<div className="dataHolder">
+						{tableData.map((itemElement) => {
+							return (
+								<FlippingItem
+									inputItem={itemElement}
+									key={itemElement.itemName}
+									inputData={boxPlotData[itemElement.itemId]}
+								/>
+							);
+						})}
+					</div>
+				)}
+			</Paper>
 		);
 	}
 }

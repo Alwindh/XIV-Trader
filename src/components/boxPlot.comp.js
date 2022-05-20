@@ -15,6 +15,9 @@ export default function UnionComp(props) {
 			zoom: {
 				enabled: false,
 			},
+			animations: {
+				enabled: false,
+			},
 		},
 
 		xaxis: {
