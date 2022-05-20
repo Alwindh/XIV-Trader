@@ -62,66 +62,62 @@ export default function MountsComp(props) {
 
 	if (!cookies) {
 		return "";
-	} else if (!loading) {
+	} else {
 		return (
 			<Paper style={{ marginTop: "1em" }}>
 				<ComponentTopBar
 					barName="Mounts"
 					updateTime={getDifferenceString(updateTime)}
 					resetTimer={resetTimer}
+					loading={loading}
 				/>
-				<div className="dataHolder">
-					{tableData.map((itemElement) => {
-						return (
-							<Accordion key={itemElement.itemId}>
-								<AccordionSummary
-									expandIcon={<ExpandMoreIcon />}
-									aria-controls="panel1a-content"
-									id="panel1a-header"
-								>
-									<Typography sx={{ width: "33%", flexShrink: 0 }}>{itemElement.itemName}</Typography>
-									<Typography sx={{ width: "33%", color: "text.secondary" }}>
-										{itemElement.undercutFactor.toFixed(2) * 100 + "%"}
-									</Typography>
-									<Typography sx={{ width: "33%", color: "text.secondary" }}>
-										{itemElement.timeSinceUpdate}
-									</Typography>
-								</AccordionSummary>
-								<AccordionDetails>
-									{itemElement.mountListings.map((listing) => {
-										return (
-											<Grid container spacing={2} key={listing.listingId}>
-												<Grid item xs={1}>
-													{listing.pricePerUnit}
+
+				{!loading && (
+					<div className="dataHolder">
+						{tableData.map((itemElement) => {
+							return (
+								<Accordion key={itemElement.itemId}>
+									<AccordionSummary
+										expandIcon={<ExpandMoreIcon />}
+										aria-controls="panel1a-content"
+										id="panel1a-header"
+									>
+										<Typography sx={{ width: "33%", flexShrink: 0 }}>
+											{itemElement.itemName}
+										</Typography>
+										<Typography sx={{ width: "33%", color: "text.secondary" }}>
+											{itemElement.undercutFactor.toFixed(2) * 100 + "%"}
+										</Typography>
+										<Typography sx={{ width: "33%", color: "text.secondary" }}>
+											{itemElement.timeSinceUpdate}
+										</Typography>
+									</AccordionSummary>
+									<AccordionDetails>
+										{itemElement.mountListings.map((listing) => {
+											return (
+												<Grid container spacing={2} key={listing.listingId}>
+													<Grid item xs={1}>
+														{listing.pricePerUnit}
+													</Grid>
+													<Grid item xs={1}>
+														{listing.quantity}
+													</Grid>
+													<Grid item xs={5}>
+														{listing.worldName}
+													</Grid>
+													<Grid item xs={5}>
+														{listing.timeString}
+													</Grid>
 												</Grid>
-												<Grid item xs={1}>
-													{listing.quantity}
-												</Grid>
-												<Grid item xs={5}>
-													{listing.worldName}
-												</Grid>
-												<Grid item xs={5}>
-													{listing.timeString}
-												</Grid>
-											</Grid>
-										);
-									})}
-								</AccordionDetails>
-							</Accordion>
-						);
-					})}
-				</div>
+											);
+										})}
+									</AccordionDetails>
+								</Accordion>
+							);
+						})}
+					</div>
+				)}
 			</Paper>
-		);
-	} else {
-		return (
-			<ComponentTopBar
-				barName="Mounts - Loading..."
-				progress={progress}
-				loading={true}
-				updateTime={getDifferenceString(updateTime)}
-				style={{ marginTop: "1em" }}
-			/>
 		);
 	}
 }
