@@ -18,7 +18,6 @@ export default function FlippingComp() {
 	const [listingsResponse, setListingsResponse] = useState();
 	const [loading, setLoading] = useState(true);
 	const [updateTime, setUpdateTime] = useState();
-	const [progress, setProgress] = useState(0);
 	const [resetTimer, setResetTimer] = useState(true);
 	const [boxPlotData, setboxPlotData] = useState({});
 	const [dataCenter, setDataCenter] = useState();
@@ -28,7 +27,6 @@ export default function FlippingComp() {
 
 	useEffect(() => {
 		setLoading(true);
-		setProgress(0);
 		setCookies(CheckSettings());
 		Axios.get("/api/data/get/top").then((response) => {
 			setLoadData(response.data);
@@ -100,7 +98,6 @@ export default function FlippingComp() {
 				setUpdateTime(new Date());
 				setListingsResponse(response.data);
 			}
-			setProgress(0);
 		});
 	}, 60000);
 

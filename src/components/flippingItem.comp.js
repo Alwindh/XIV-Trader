@@ -15,7 +15,7 @@ export default function FlippingItem(props) {
 		const numItems = props.inputItem.viableListings.slice(0, 10);
 		const maxHeight = baseHeight + numItems.length * 21;
 		setMaxHeight(`${maxHeight - 8 - 16}px`);
-	}, []);
+	}, [props.inputItem.viableListings]);
 
 	return (
 		<Accordion TransitionProps={{ unmountOnExit: true }} key={props.inputItem.itemId + props.inputItem.itemName}>

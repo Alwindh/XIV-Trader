@@ -20,13 +20,11 @@ export default function MountsComp(props) {
 	const [tableData, setTableData] = useState();
 	const [loading, setLoading] = useState(true);
 	const [updateTime, setUpdateTime] = useState();
-	const [progress, setProgress] = useState(0);
 	const [resetTimer, setResetTimer] = useState(true);
 	const [cookies, setCookies] = useState();
 	const [dataCenter, setDataCenter] = useState();
 
 	useEffect(() => {
-		setProgress(0);
 		setLoading(true);
 		setCookies(CheckSettings());
 	}, []);
@@ -56,7 +54,6 @@ export default function MountsComp(props) {
 				setUpdateTime(new Date());
 				setTableData(mountsData);
 			}
-			setProgress(0);
 		});
 	}, 60000);
 
