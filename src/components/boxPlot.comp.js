@@ -15,6 +15,19 @@ export default function UnionComp(props) {
 			zoom: {
 				enabled: false,
 			},
+			animations: {
+				enabled: true,
+				easing: "easeinout",
+				speed: 500,
+				animateGradually: {
+					enabled: true,
+					delay: 0,
+				},
+				dynamicAnimation: {
+					enabled: true,
+					speed: 350,
+				},
+			},
 		},
 
 		xaxis: {

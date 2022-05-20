@@ -64,7 +64,7 @@ export default function MountsComp(props) {
 		return "";
 	} else if (!loading) {
 		return (
-			<Paper style={{ marginBottom: "1em" }}>
+			<Paper style={{ marginTop: "1em" }}>
 				<ComponentTopBar
 					barName="Mounts"
 					updateTime={getDifferenceString(updateTime)}
@@ -120,6 +120,7 @@ export default function MountsComp(props) {
 				progress={progress}
 				loading={true}
 				updateTime={getDifferenceString(updateTime)}
+				style={{ marginTop: "1em" }}
 			/>
 		);
 	}

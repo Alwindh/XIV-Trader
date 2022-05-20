@@ -108,7 +108,7 @@ export default function FlippingComp() {
 		return "";
 	} else if (!loading) {
 		return (
-			<Paper style={{ marginBottom: "1em" }}>
+			<Paper style={{ marginTop: "1em" }}>
 				<ComponentTopBar
 					barName="Flipping"
 					resetTimer={resetTimer}
@@ -129,12 +129,15 @@ export default function FlippingComp() {
 		);
 	} else {
 		return (
-			<ComponentTopBar
-				barName="Flipping - Loading..."
-				loading={true}
-				progress={progress}
-				updateTime={getDifferenceString(updateTime)}
-			/>
+			<Paper style={{ marginTop: "1em" }}>
+				<ComponentTopBar
+					barName="Flipping - Loading..."
+					loading={true}
+					progress={progress}
+					updateTime={getDifferenceString(updateTime)}
+					style={{ marginTop: "1em" }}
+				/>
+			</Paper>
 		);
 	}
 }

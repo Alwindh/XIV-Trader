@@ -32,7 +32,7 @@ html, body{
 }
 
 .dataHolder {
-  /* animation: createBox 1s; */
+  animation: createBox 0.5s;
 }
 
 @keyframes createBox {
@@ -40,15 +40,18 @@ html, body{
     transform-origin: top center;
     transform: scaleY(0);
     max-height: 0px;
+    opacity: 0;
   }
     50% {
     transform-origin: top center;
     transform: scaleY(0);
     max-height: 0px;
+    opacity:0
   }
   100% {
     transform-origin: top center;
     transform: scaleY(1);
-    max-height: 5000px;
+    max-height: 500px;
+    opacity:1
   }
 }
