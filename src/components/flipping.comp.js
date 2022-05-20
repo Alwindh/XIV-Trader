@@ -88,11 +88,14 @@ export default function FlippingComp() {
 		if (tableData) {
 			setLoading(false);
 		}
-	}, [tableData]);
+		if (!resetTimer) {
+			setResetTimer(true);
+		}
+	}, [tableData, resetTimer]);
 
 	useInterval(() => {
 		// this needs major overhaul
-		setResetTimer(!resetTimer);
+		setResetTimer(false);
 		Axios.get("https://universalis.app/api/v2/" + dataCenter + "/" + itemIds).then((response) => {
 			if (JSON.stringify(response.data) !== JSON.stringify(listingsResponse)) {
 				setUpdateTime(new Date());
