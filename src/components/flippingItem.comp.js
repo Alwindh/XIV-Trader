@@ -29,7 +29,7 @@ export default function FlippingItem(props) {
 				</Typography>
 			</AccordionSummary>
 			<AccordionDetails style={{ height: maxHeight, maxHeight }}>
-				<BoxPlotChart inputData={props.inputData} />
+				<BoxPlotChart inputName={props.inputItem.itemName} inputData={props.inputData} />
 
 				<Box sx={{ width: "100%", marginBottom: "1em" }}>
 					<a href={`https://universalis.app/market/${props.inputItem.itemId}`} target="blank">
@@ -46,7 +46,10 @@ export default function FlippingItem(props) {
 							<Grid item xs={1}>
 								{listing.quantity}
 							</Grid>
-							<Grid item xs={5}>
+							<Grid item xs={1}>
+								{listing.hq ? "HQ" : ""}
+							</Grid>
+							<Grid item xs={4}>
 								{listing.worldName}
 							</Grid>
 							<Grid item xs={5}>
