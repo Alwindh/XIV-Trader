@@ -5,7 +5,9 @@ import Box from "@mui/material/Box";
 
 export default function UnionComp(props) {
 	const [barData, setBarData] = useState();
-	const [barOptions] = useState({
+	const [hqItem, setHqItem] = useState(false);
+
+	const barOptions = {
 		chart: {
 			type: "boxPlot",
 			height: 350,
@@ -40,9 +42,9 @@ export default function UnionComp(props) {
 				fontFamily: undefined,
 			},
 		},
-	});
+	};
 
-	function generateCandleStick(inputData) {
+	function generateBoxPlot(inputData) {
 		let sortingArray = {};
 		const copyData = inputData.entries.slice();
 		copyData.forEach((entry) => {
@@ -62,10 +64,14 @@ export default function UnionComp(props) {
 		for (let key in sortingArray) {
 			priceArray[key] = [];
 			sortingArray[key].forEach((listing) => {
-				priceArray[key].push(listing.pricePerUnit);
+				if (!hqItem) {
+					priceArray[key].push(listing.pricePerUnit);
+				} else if (hqItem && listing.hq) {
+					priceArray[key].push(listing.pricePerUnit);
+				}
 			});
 		}
-		let candleStickArray = [];
+		let boxPlotArray = [];
 		for (let key in priceArray) {
 			const listingPrices = priceArray[key];
 			listingPrices.sort(function (a, b) {
@@ -78,14 +84,17 @@ export default function UnionComp(props) {
 			const median = listingPrices[Math.floor(listingPrices.length * 0.5)];
 			const dateObject = new Date(key * 1000);
 			const dataEntry = { x: dateObject, y: [minPrice, lowerQuart, median, upperQuart, maxPrice] };
-			candleStickArray.push(dataEntry);
+			boxPlotArray.push(dataEntry);
 		}
-		setBarData([{ data: candleStickArray }]);
+		setBarData([{ data: boxPlotArray }]);
 	}
 
 	useEffect(() => {
 		if (props.inputData) {
-			generateCandleStick(props.inputData);
+			generateBoxPlot(props.inputData);
+			if (props.inputName.slice(-2) === "HQ") {
+				setHqItem(true);
+			}
 		}
 	}, [props]);
 
