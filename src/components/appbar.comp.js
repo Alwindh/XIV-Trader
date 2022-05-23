@@ -9,6 +9,7 @@ import SettingsCard from "./settings.comp";
 import { CheckSettings } from "../helpers/cookies.helper";
 import { Typography } from "@mui/material";
 import CurrencyExchangeIcon from "@mui/icons-material/CurrencyExchange";
+import Button from "@mui/material/Button";
 
 const serverData = require("../data/servers.data.json");
 
@@ -63,21 +64,23 @@ export default function MenuAppBar() {
 							XIV Trader
 						</Typography>
 					</Toolbar>
-					<Toolbar>
-						<Typography style={{ paddingRight: "2em" }}>{dataCenter ? dataCenter : ""}</Typography>
-						<Typography style={{ paddingRight: "2em" }}>{serverName ? serverName : ""}</Typography>
-						<Typography style={{ paddingRight: "2em" }}>
-							{cutoffPrice ? "> " + cutoffPrice + " gil" : ""}
-						</Typography>
-						<IconButton
-							onClick={() => {
-								setSettingsButton(true);
-							}}
-							size="large"
-							edge="start"
-							color="inherit"
-							aria-label="home"
-						>
+					<Toolbar
+						onClick={() => {
+							setSettingsButton(true);
+						}}
+					>
+						<Button style={{ marginRight: "2em" }}>
+							<Typography style={{ color: "#fff" }}>{dataCenter ? dataCenter : ""}</Typography>
+						</Button>
+						<Button style={{ marginRight: "2em" }}>
+							<Typography style={{ color: "#fff" }}>{serverName ? serverName : ""}</Typography>
+						</Button>
+						<Button style={{ marginRight: "2em" }}>
+							<Typography style={{ color: "#fff" }}>
+								{cutoffPrice ? "> " + cutoffPrice + " gil" : ""}
+							</Typography>
+						</Button>
+						<IconButton size="large" edge="start" color="inherit" aria-label="home">
 							<SettingsIcon />
 						</IconButton>
 					</Toolbar>
