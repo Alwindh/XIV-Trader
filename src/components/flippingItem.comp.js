@@ -28,7 +28,7 @@ export default function FlippingItem(props) {
 					{props.inputItem.timeSinceUpdate}
 				</Typography>
 			</AccordionSummary>
-			<AccordionDetails style={{ height: maxHeight, maxHeight }}>
+			<AccordionDetails>
 				<BoxPlotChart inputName={props.inputItem.itemName} inputData={props.inputData} />
 
 				<Box sx={{ width: "100%", marginBottom: "1em" }}>

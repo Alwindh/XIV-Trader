@@ -20,6 +20,10 @@ export default function UnionComp(props) {
 			animations: {
 				enabled: false,
 			},
+			background: "#121212",
+		},
+		theme: {
+			mode: "dark",
 		},
 
 		xaxis: {
