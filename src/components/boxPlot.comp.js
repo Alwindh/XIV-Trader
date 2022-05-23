@@ -103,11 +103,7 @@ export default function UnionComp(props) {
 	}, [props]);
 
 	if (barData) {
-		return (
-			<div id="chart">
-				<Chart options={barOptions} series={barData} type="boxPlot" height={350} />
-			</div>
-		);
+		return <Chart options={barOptions} series={barData} type="boxPlot" height={350} />;
 	} else {
 		return (
 			<Box sx={{ display: "flex" }}>
