@@ -20,18 +20,35 @@ export default function UnionComp(props) {
 			animations: {
 				enabled: false,
 			},
-			background: "#121212",
 		},
-		theme: {
-			mode: "dark",
+		tooltip: {
+			theme: "dark",
+		},
+		stroke: {
+			show: true,
+			curve: "smooth",
+			lineCap: "butt",
+			colors: ["#FFFFFF"],
+			width: 1,
+			dashArray: 0,
 		},
 
 		xaxis: {
 			type: "datetime",
+			labels: {
+				style: {
+					colors: ["#FFFFFF", "#FFFFFF", "#FFFFFF", "#FFFFFF"],
+				},
+			},
 		},
 		yaxis: {
 			tooltip: {
 				enabled: true,
+			},
+			labels: {
+				style: {
+					colors: ["#FFFFFF"],
+				},
 			},
 		},
 		noData: {
