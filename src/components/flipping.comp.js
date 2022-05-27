@@ -108,7 +108,7 @@ export default function FlippingComp() {
 		return "";
 	} else {
 		return (
-			<Paper style={{ marginTop: "1em" }}>
+			<Paper elevation={2} style={{ marginTop: "1em" }}>
 				<ComponentTopBar
 					barName="Items"
 					resetTimer={resetTimer}

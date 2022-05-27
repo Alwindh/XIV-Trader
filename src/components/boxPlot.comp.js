@@ -21,13 +21,34 @@ export default function UnionComp(props) {
 				enabled: false,
 			},
 		},
+		tooltip: {
+			theme: "dark",
+		},
+		stroke: {
+			show: true,
+			curve: "smooth",
+			lineCap: "butt",
+			colors: ["#FFFFFF"],
+			width: 1,
+			dashArray: 0,
+		},
 
 		xaxis: {
 			type: "datetime",
+			labels: {
+				style: {
+					colors: ["#FFFFFF", "#FFFFFF", "#FFFFFF", "#FFFFFF"],
+				},
+			},
 		},
 		yaxis: {
 			tooltip: {
 				enabled: true,
+			},
+			labels: {
+				style: {
+					colors: ["#FFFFFF"],
+				},
 			},
 		},
 		noData: {
@@ -99,11 +120,7 @@ export default function UnionComp(props) {
 	}, [props]);
 
 	if (barData) {
-		return (
-			<div id="chart">
-				<Chart options={barOptions} series={barData} type="boxPlot" height={350} />
-			</div>
-		);
+		return <Chart options={barOptions} series={barData} type="boxPlot" height={350} />;
 	} else {
 		return (
 			<Box sx={{ display: "flex" }}>
