@@ -37,24 +37,32 @@ export default function MountsComp(props) {
 
 	useEffect(() => {
 		if (dataCenter) {
-			Axios.get("https://universalis.app/api/v2/" + dataCenter + "/" + itemIds).then((response) => {
-				let mountsData = combineMountsData(loadData, response.data);
-				setTableData(mountsData);
-				setUpdateTime(new Date());
-				setLoading(false);
-			});
+			Axios.get("https://universalis.app/api/v2/" + dataCenter + "/" + itemIds)
+				.then((response) => {
+					let mountsData = combineMountsData(loadData, response.data);
+					setTableData(mountsData);
+					setUpdateTime(new Date());
+					setLoading(false);
+				})
+				.catch((error) => {
+					console.log(error);
+				});
 		}
 	}, [dataCenter]);
 
 	useInterval(() => {
 		setResetTimer(!resetTimer);
-		Axios.get("https://universalis.app/api/v2/" + dataCenter + "/" + itemIds).then((response) => {
-			let mountsData = combineMountsData(loadData, response.data);
-			if (JSON.stringify(mountsData) !== JSON.stringify(tableData)) {
-				setUpdateTime(new Date());
-				setTableData(mountsData);
-			}
-		});
+		Axios.get("https://universalis.app/api/v2/" + dataCenter + "/" + itemIds)
+			.then((response) => {
+				let mountsData = combineMountsData(loadData, response.data);
+				if (JSON.stringify(mountsData) !== JSON.stringify(tableData)) {
+					setUpdateTime(new Date());
+					setTableData(mountsData);
+				}
+			})
+			.catch((error) => {
+				console.log(error);
+			});
 	}, 60000);
 
 	if (!cookies) {

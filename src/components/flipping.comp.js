@@ -28,11 +28,15 @@ export default function FlippingComp() {
 	useEffect(() => {
 		setLoading(true);
 		setCookies(CheckSettings());
-		Axios.get("/api/data/get/top").then((response) => {
-			setLoadData(response.data);
-			const itemIds = getItemIds(response.data);
-			setItemIds(itemIds);
-		});
+		Axios.get("/api/data/get/top")
+			.then((response) => {
+				setLoadData(response.data);
+				const itemIds = getItemIds(response.data);
+				setItemIds(itemIds);
+			})
+			.catch((error) => {
+				console.log(error);
+			});
 	}, []);
 
 	useEffect(() => {
@@ -58,9 +62,13 @@ export default function FlippingComp() {
 				.catch((error) => {
 					console.log(error);
 				});
-			Axios.get("https://universalis.app/api/v2/" + dataCenter + "/" + itemIds).then((response) => {
-				setListingsResponse(response.data);
-			});
+			Axios.get("https://universalis.app/api/v2/" + dataCenter + "/" + itemIds)
+				.then((response) => {
+					setListingsResponse(response.data);
+				})
+				.catch((error) => {
+					console.log(error);
+				});
 		}
 	}, [server, dataCenter, itemIds]);
 
@@ -96,12 +104,16 @@ export default function FlippingComp() {
 	useInterval(() => {
 		// this needs major overhaul
 		setResetTimer(false);
-		Axios.get("https://universalis.app/api/v2/" + dataCenter + "/" + itemIds).then((response) => {
-			if (JSON.stringify(response.data) !== JSON.stringify(listingsResponse)) {
-				setUpdateTime(new Date());
-				setListingsResponse(response.data);
-			}
-		});
+		Axios.get("https://universalis.app/api/v2/" + dataCenter + "/" + itemIds)
+			.then((response) => {
+				if (JSON.stringify(response.data) !== JSON.stringify(listingsResponse)) {
+					setUpdateTime(new Date());
+					setListingsResponse(response.data);
+				}
+			})
+			.catch((error) => {
+				console.log(error);
+			});
 	}, 60000);
 
 	if (!cookies) {

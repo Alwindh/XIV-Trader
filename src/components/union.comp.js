@@ -24,11 +24,15 @@ export default function UnionComp() {
 
 	useEffect(() => {
 		if (server) {
-			Axios.get("https://universalis.app/api/v2/" + server + "/" + itemIds).then((response) => {
-				const responseData = combineUnionData(loadData, response.data);
-				setTableData(responseData);
-				setLoading(false);
-			});
+			Axios.get("https://universalis.app/api/v2/" + server + "/" + itemIds)
+				.then((response) => {
+					const responseData = combineUnionData(loadData, response.data);
+					setTableData(responseData);
+					setLoading(false);
+				})
+				.catch((error) => {
+					console.log(error);
+				});
 		}
 	}, [server]);
 
